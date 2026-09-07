@@ -1,18 +1,17 @@
 function projectCard(project) {
   const appLink = project.app
-    ? `<a class="button" href="${project.app}">Apri applicazione</a>`
+    ? '<a class="button" href="' + project.app + '">Apri applicazione</a>'
+    : "";
+  const downloadLink = project.download
+    ? '<a class="button" href="' + project.download + '" download>Scarica per Windows</a>'
     : "";
 
-  return `
-    <article class="project-card">
-      <p class="project-meta">${project.categoria} · ${project.stato}</p>
-      <h2>${project.titolo}</h2>
-      <p>${project.descrizione}</p>
-      <div class="project-links">
-        ${appLink}
-        <a href="${project.repository}">Repository GitHub</a>
-      </div>
-    </article>`;
+  return '<article class="project-card">' +
+    '<p class="project-meta">' + project.categoria + ' · ' + project.stato + '</p>' +
+    '<h2>' + project.titolo + '</h2>' +
+    '<p>' + project.descrizione + '</p>' +
+    '<div class="project-links">' + appLink + downloadLink + '</div>' +
+    '</article>';
 }
 
 async function renderProjects() {
@@ -28,5 +27,5 @@ async function renderProjects() {
 
 renderProjects().catch(error => {
   const target = document.querySelector("#featured-projects, #all-projects");
-  if (target) target.innerHTML = `<p class="empty-state">${error.message}.</p>`;
+  if (target) target.innerHTML = '<p class="empty-state">' + error.message + '.</p>';
 });
