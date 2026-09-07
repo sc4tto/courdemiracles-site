@@ -29,5 +29,16 @@
     "app": "apps/pixel-sheet-converter/",
     "download": "https://github.com/sc4tto/App-Peneluglio_PixelSheetConverter/releases/download/v1.2.0/PixelSheetConverter-Windows-x64.zip",
     "featured": true
+  },
+  {
+    "id": "atlante-storico",
+    "titolo": "Atlante storico",
+    "categoria": "Archivio e ricerca",
+    "descrizione": "Atlante consultabile per epoche, macroregioni e centri abitati.",
+    "stato": "Disponibile online",
+    "repository": "https://github.com/sc4tto/archivio-storico-epoche-citta",
+    "app": "https://atlante.courdemiracles.net/",
+    "actionLabel": "Apri Atlante",
+    "featured": true
   }
 ]
