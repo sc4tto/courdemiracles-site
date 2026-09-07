@@ -16,7 +16,7 @@ function projectCard(project) {
 }
 
 async function renderProjects() {
-  const response = await fetch("data/projects.json");
+  const response = await fetch("data/projects.json?v=20260907-2", { cache: "no-store" });
   if (!response.ok) throw new Error("Archivio dei progetti non disponibile");
   const projects = await response.json();
 
