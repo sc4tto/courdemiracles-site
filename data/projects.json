@@ -22,11 +22,12 @@
   {
     "id": "pixel-sheet-converter",
     "titolo": "Pixel Sheet Converter",
-    "categoria": "Software e ricerca",
-    "descrizione": "Conversione e documentazione di processi grafici basati sul colore.",
-    "stato": "In sviluppo",
-    "repository": "https://github.com/sc4tto/pixel-sheet-converter",
+    "categoria": "Applicazione desktop",
+    "descrizione": "Converte immagini in matrici di pixel e celle ed esporta i risultati in PNG e XLSX. Versione portatile per Windows 10 e 11 a 64 bit.",
+    "stato": "Disponibile per Windows",
+    "repository": "https://github.com/sc4tto/App-Peneluglio_PixelSheetConverter",
     "app": "",
+    "download": "https://github.com/sc4tto/App-Peneluglio_PixelSheetConverter/releases/download/v1.2.0/PixelSheetConverter-Windows-x64.zip",
     "featured": true
   }
 ]
