@@ -1,6 +1,7 @@
 function projectCard(project) {
+  const appLabel = project.actionLabel || "Apri applicazione";
   const appLink = project.app
-    ? '<a class="button" href="' + project.app + '">Apri applicazione</a>'
+    ? '<a class="button" href="' + project.app + '">' + appLabel + '</a>'
     : "";
   const downloadLink = project.download
     ? '<a class="button" href="' + project.download + '" download>Scarica per Windows</a>'
