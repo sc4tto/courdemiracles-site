@@ -1,0 +1,32 @@
+function projectCard(project) {
+  const appLink = project.app
+    ? `<a class="button" href="${project.app}">Apri applicazione</a>`
+    : "";
+
+  return `
+    <article class="project-card">
+      <p class="project-meta">${project.categoria} · ${project.stato}</p>
+      <h2>${project.titolo}</h2>
+      <p>${project.descrizione}</p>
+      <div class="project-links">
+        ${appLink}
+        <a href="${project.repository}">Repository GitHub</a>
+      </div>
+    </article>`;
+}
+
+async function renderProjects() {
+  const response = await fetch("data/projects.json");
+  if (!response.ok) throw new Error("Archivio dei progetti non disponibile");
+  const projects = await response.json();
+
+  const featured = document.querySelector("#featured-projects");
+  const all = document.querySelector("#all-projects");
+  if (featured) featured.innerHTML = projects.filter(p => p.featured).map(projectCard).join("");
+  if (all) all.innerHTML = projects.map(projectCard).join("");
+}
+
+renderProjects().catch(error => {
+  const target = document.querySelector("#featured-projects, #all-projects");
+  if (target) target.innerHTML = `<p class="empty-state">${error.message}.</p>`;
+});
