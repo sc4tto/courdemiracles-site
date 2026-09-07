@@ -6,7 +6,7 @@
     "descrizione": "Quiz interattivo per lo studio e il riconoscimento di 73 opere.",
     "stato": "In sviluppo",
     "repository": "https://github.com/sc4tto/quiz-storia-dell-arte",
-    "app": "",
+    "app": "apps/quiz-arte/",
     "featured": true
   },
   {
