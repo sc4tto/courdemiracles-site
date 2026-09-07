@@ -1,1 +1,89 @@
-<!doctype html><title>Pixel Sheet Converter</title>
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Converti immagini in griglie di celle usando palette e dithering direttamente nel browser.">
+  <title>Pixel Sheet Converter — Cour de Miracles</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="app-header">
+    <a href="../../" class="brand">Cour de Miracles</a>
+    <span>Pixel Sheet Converter</span>
+  </header>
+
+  <main class="workspace">
+    <aside class="controls" aria-label="Impostazioni di conversione">
+      <section class="panel">
+        <h1>1. Immagine</h1>
+        <label class="file-button" for="image-input">Apri immagine</label>
+        <input id="image-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+        <p id="file-name" class="hint">Nessuna immagine selezionata</p>
+      </section>
+
+      <section class="panel fields">
+        <h2>2. Dimensioni</h2>
+        <label for="cell-width">Larghezza in celle</label>
+        <input id="cell-width" type="number" min="8" max="1200" value="160">
+        <label for="resampling">Ricampionamento</label>
+        <select id="resampling">
+          <option value="smooth">Bilineare</option>
+          <option value="pixel">Pixel / nearest</option>
+        </select>
+        <label for="pitch">Passo pixel (mm)</label>
+        <input id="pitch" type="number" min="0.01" step="0.01" value="0.50">
+        <p id="size-info" class="hint">Altezza: — · Celle: —</p>
+      </section>
+
+      <section class="panel fields">
+        <h2>3. Colori e dithering</h2>
+        <label for="palette">Palette</label>
+        <select id="palette">
+          <option value="primary">RGB primari</option>
+          <option value="primary-bw">RGB + bianco e nero</option>
+          <option value="cmy">CMY</option>
+          <option value="gray">Scala di grigi (8)</option>
+        </select>
+        <div id="swatches" class="swatches" aria-label="Colori della palette"></div>
+        <label for="metric">Confronto colore</label>
+        <select id="metric">
+          <option value="oklab">OKLab percettivo</option>
+          <option value="rgb">RGB classico</option>
+          <option value="linear">RGB lineare</option>
+        </select>
+        <label for="dither">Dithering</label>
+        <select id="dither">
+          <option value="floyd-serpentine">Floyd–Steinberg serpentino</option>
+          <option value="none">Nessuno</option>
+          <option value="floyd">Floyd–Steinberg</option>
+          <option value="atkinson">Atkinson</option>
+          <option value="bayer">Bayer 4×4</option>
+          <option value="sierra">Sierra Lite</option>
+          <option value="stucki">Stucki</option>
+          <option value="jjn">Jarvis–Judice–Ninke</option>
+        </select>
+      </section>
+
+      <button id="convert" class="primary" disabled>Genera anteprima</button>
+      <div class="export-row">
+        <button id="save-png" disabled>Esporta PNG</button>
+        <a class="secondary-link" href="https://github.com/sc4tto/App-Peneluglio_PixelSheetConverter/releases/download/v1.2.0/PixelSheetConverter-Windows-x64.zip">Versione Windows</a>
+      </div>
+      <p id="status" class="status" role="status">Pronto</p>
+    </aside>
+
+    <section class="preview-panel" aria-label="Anteprima immagine">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="result" role="tab">Convertita</button>
+        <button class="tab" data-tab="original" role="tab">Originale</button>
+        <button class="tab" data-tab="stats" role="tab">Statistiche</button>
+      </div>
+      <div id="result-view" class="view active"><canvas id="result-canvas"></canvas><p>Apri un’immagine e genera l’anteprima.</p></div>
+      <div id="original-view" class="view"><canvas id="source-canvas"></canvas></div>
+      <div id="stats-view" class="view"><div id="stats"></div></div>
+    </section>
+  </main>
+</body>
+</html>
