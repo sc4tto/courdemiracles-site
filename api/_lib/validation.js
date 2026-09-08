@@ -52,7 +52,7 @@ export function filenameValue(value) {
 
 export function mediaContextInput(body, configuredSlug) {
   const input = objectValue(body);
-  const slug = slugValue(input.slug || configuredSlug, "slug");
+  const slug = configuredSlugValue(input.slug, configuredSlug);
   if (!Array.isArray(input.filenames) || input.filenames.length !== 1) {
     invalid("filenames must contain exactly one Pixel Sheet PNG.");
   }
@@ -79,7 +79,7 @@ function optionalUrl(value, label) {
 
 export function selfMintInput(body, configuredSlug) {
   const input = objectValue(body);
-  const slug = slugValue(input.slug || configuredSlug, "slug");
+  const slug = configuredSlugValue(input.slug, configuredSlug);
   const mediaToken = stringValue(input.mediaToken, "mediaToken", { min: 1, max: 8192 });
   const name = stringValue(input.name, "name", { min: 1, max: 100 });
   const supply = stringValue(input.supply, "supply", { min: 1, max: 78 });
@@ -166,7 +166,15 @@ export function shelfInput(body, config) {
   return result;
 }
 
-export function assertTransaction(value) {
+function configuredSlugValue(requestedSlug, configuredSlug) {
+  const slug = slugValue(configuredSlug, "configured slug");
+  if (requestedSlug !== undefined && slugValue(requestedSlug, "slug") !== slug) {
+    invalid("slug must match the configured Pixel Sheet collection.");
+  }
+  return slug;
+}
+
+export function assertTransaction(value, expectedChain) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     throw new ApiError(502, "UPSTREAM_SCHEMA_MISMATCH", "OpenSea returned an invalid transaction response.");
   }
@@ -182,6 +190,13 @@ export function assertTransaction(value) {
   }
   if (typeof transaction.chain !== "string" || !SAFE_CHAIN.test(transaction.chain)) {
     throw new ApiError(502, "UPSTREAM_SCHEMA_MISMATCH", "OpenSea returned an invalid transaction chain.");
+  }
+  if (expectedChain && transaction.chain !== expectedChain) {
+    throw new ApiError(
+      502,
+      "UPSTREAM_CHAIN_MISMATCH",
+      "OpenSea returned a transaction for a different blockchain.",
+    );
   }
   return transaction;
 }

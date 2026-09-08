@@ -165,6 +165,14 @@ test("media and mint invariants reject non-PNG batches and supply other than one
   );
   assert.equal(mintResponse.statusCode, 400);
   assert.equal(mintResponse.body.error.code, "INVALID_REQUEST");
+
+  const wrongSlugResponse = new MockResponse();
+  await mediaHandler(
+    request("POST", { slug: "another-collection", filenames: ["work.png"] }),
+    wrongSlugResponse,
+  );
+  assert.equal(wrongSlugResponse.statusCode, 400);
+  assert.equal(wrongSlugResponse.body.error.code, "INVALID_REQUEST");
 });
 
 test("shelf sync fails closed until the managed contract is configured", async () => {

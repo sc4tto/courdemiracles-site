@@ -276,7 +276,7 @@ export function createOpenSeaClient({ fetchImpl = globalThis.fetch, config = get
         accessToken,
         body: item,
       });
-      return assertTransaction(response);
+      return assertTransaction(response, config.chain);
     },
 
     async getProfileShelves(address) {

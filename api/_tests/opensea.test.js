@@ -118,6 +118,27 @@ test("media and SelfMint calls use API key plus wallet JWT and validate flat res
   }
 });
 
+test("SelfMint rejects a transaction prepared for a different chain", async () => {
+  const client = createOpenSeaClient({
+    config: config({ chain: "base" }),
+    fetchImpl: async () => response({
+      to: "0x0000000000000000000000000000000000000002",
+      data: "0x1234",
+      value: "0x0",
+      chain: "ethereum",
+    }),
+  });
+
+  await assert.rejects(
+    () => client.prepareSelfMintItem({
+      slug: "pixel-sheet",
+      item: { media_token: "media-token", name: "Work", supply: "1" },
+      accessToken: "wallet-jwt",
+    }),
+    (error) => error instanceof ApiError && error.code === "UPSTREAM_CHAIN_MISMATCH",
+  );
+});
+
 test("upstream errors never expose OpenSea response bodies", async () => {
   const client = createOpenSeaClient({
     config: config(),
