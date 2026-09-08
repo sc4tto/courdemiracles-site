@@ -95,7 +95,9 @@
     if(!response.ok){
       const remote=payload?.error||{};
       if(response.status===401||remote.code==='SESSION_REQUIRED')resetAuthentication();
-      throw new ServiceError(remote.code||'SERVICE_ERROR',remote.message||`Richiesta non riuscita (${response.status}).`,{status:response.status});
+      const upstreamStatus=remote?.details?.upstreamStatus;
+      const diagnostic=Number.isInteger(upstreamStatus)?` [${path}: OpenSea HTTP ${upstreamStatus}]`:'';
+      throw new ServiceError(remote.code||'SERVICE_ERROR',`${remote.message||`Richiesta non riuscita (${response.status}).`}${diagnostic}`,{status:response.status});
     }
     return payload;
   }
