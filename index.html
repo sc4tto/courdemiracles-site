@@ -3,36 +3,185 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Cour de Miracles: archivio di progetti, applicazioni e documenti.">
-  <title>Cour de Miracles</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Unix Atelier: prototipo interattivo di Cour de Miracles per esplorare progetti, applicazioni e media.">
+  <meta name="theme-color" content="#171a18">
+  <title>Cour de Miracles — Unix Atelier</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="index.html">Cour de Miracles</a>
-    <nav aria-label="Navigazione principale">
-      <a aria-current="page" href="index.html">Home</a>
-      <a href="progetti.html">Progetti</a>
-      <a href="documenti.html">Documenti</a>
-      <a href="https://github.com/sc4tto">GitHub</a>
-    </nav>
-  </header>
+  <div class="desktop" id="desktop" data-workspace="desk">
+    <header class="system-bar">
+      <button class="brand" type="button" data-switch="desk" aria-label="Apri il tavolo di lavoro">
+        <span class="brand-mark" aria-hidden="true">CdM</span>
+        <span>cour de miracles</span>
+      </button>
+      <nav class="workspace-switcher" aria-label="Spazi di lavoro" role="tablist">
+        <button class="workspace-tab is-active" type="button" role="tab" aria-controls="workspace-desk" aria-selected="true" data-switch="desk"><span>01</span> Tavolo</button>
+        <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-sphere" aria-selected="false" data-switch="sphere"><span>02</span> Sfera</button>
+        <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-portfolio" aria-selected="false" data-switch="portfolio"><span>03</span> Portfolio</button>
+        <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-media" aria-selected="false" data-switch="media"><span>04</span> Media</button>
+      </nav>
+      <div class="system-tools">
+        <span class="system-state"><i aria-hidden="true"></i> locale</span>
+        <time id="system-clock" datetime="00:00">00:00</time>
+        <button class="command-button" id="command-button" type="button" aria-haspopup="dialog">comandi <kbd>Ctrl K</kbd></button>
+      </div>
+    </header>
 
-  <main>
-    <section class="intro">
-      <p class="eyebrow">Archivio digitale</p>
-      <h1>Progetti, applicazioni e ricerche</h1>
-      <p>Una pagina centrale per consultare lavori, strumenti, documentazione e sperimentazioni.</p>
-      <a class="button" href="progetti.html">Esplora i progetti</a>
-    </section>
+    <main class="desktop-body">
+      <aside class="file-browser tile" aria-label="Archivio dei contenuti">
+        <div class="window-bar">
+          <span class="window-name">archivio</span>
+          <span class="window-path">~/cour-de-miracles</span>
+          <span class="window-status">rw</span>
+        </div>
+        <div class="tree" role="tree" aria-label="Cartelle del sito">
+          <button class="tree-row folder-row is-expanded" type="button" role="treeitem" aria-expanded="true" data-switch="portfolio">
+            <span class="tree-twist">⌄</span><span class="folder-glyph" aria-hidden="true"></span><span>architettura</span><small>04</small>
+          </button>
+          <div class="tree-group" role="group">
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="architecture"><span class="file-glyph" aria-hidden="true"></span><span>indice.portfolio</span></button>
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="drawings"><span class="file-glyph" aria-hidden="true"></span><span>disegni + modelli</span></button>
+          </div>
+          <button class="tree-row folder-row is-expanded" type="button" role="treeitem" aria-expanded="true" data-open="laboratory">
+            <span class="tree-twist">⌄</span><span class="folder-glyph" aria-hidden="true"></span><span>laboratorio</span><small>04</small>
+          </button>
+          <div class="tree-group" role="group">
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="atlas"><span class="run-glyph" aria-hidden="true">▶</span><span>atlante.web</span></button>
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="quiz"><span class="run-glyph" aria-hidden="true">▶</span><span>quiz-arte.web</span></button>
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="pixel"><span class="run-glyph" aria-hidden="true">▶</span><span>pixel-sheet.web</span></button>
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="trace"><span class="file-glyph" aria-hidden="true"></span><span>trace-studio.dev</span></button>
+          </div>
+          <button class="tree-row folder-row" type="button" role="treeitem" aria-expanded="false" data-switch="media">
+            <span class="tree-twist">›</span><span class="folder-glyph" aria-hidden="true"></span><span>media</span><small>02</small>
+          </button>
+          <button class="tree-row folder-row" type="button" role="treeitem" aria-expanded="false" data-open="profile">
+            <span class="tree-twist">›</span><span class="folder-glyph" aria-hidden="true"></span><span>profilo</span><small>01</small>
+          </button>
+        </div>
+        <div class="browser-footer">
+          <span>8 elementi</span>
+          <button type="button" data-command="help">guida</button>
+        </div>
+      </aside>
 
-    <section aria-labelledby="titolo-evidenza">
-      <h2 id="titolo-evidenza">Progetti in evidenza</h2>
-      <div id="featured-projects" class="project-grid" aria-live="polite"></div>
-    </section>
-  </main>
+      <section class="workspace workspace-desk is-active" id="workspace-desk" data-workspace-panel="desk" aria-label="Tavolo di lavoro">
+        <section class="atelier-window tile">
+          <div class="window-bar">
+            <span class="window-name">tavolo</span>
+            <span class="window-path">~/cour-de-miracles/atelier</span>
+            <span class="window-status">01</span>
+          </div>
+          <div class="worktable">
+            <p class="table-instruction"><span>seleziona</span> un oggetto per consultarne la scheda</p>
+            <button class="table-object blueprint-object" type="button" data-open="architecture">
+              <span class="object-meta">A—01 / portfolio</span><strong>Architettura</strong>
+              <span class="blueprint-plan" aria-hidden="true"><i></i><i></i><i></i></span>
+              <small>progetti · tavole · processi</small>
+            </button>
+            <button class="table-object folder-object" type="button" data-open="laboratory">
+              <span class="folder-tab" aria-hidden="true">LAB / 04</span><span class="object-meta">applicazioni</span>
+              <strong>Laboratorio</strong><small>atlante · quiz · pixel · trace</small>
+            </button>
+            <button class="sphere-portal" type="button" data-switch="sphere" aria-label="Entra nella mappa sferica">
+              <canvas id="desk-sphere" aria-hidden="true"></canvas><span><small>workspace 02</small> entra nella sfera</span>
+            </button>
+            <button class="table-object media-object" type="button" data-switch="media">
+              <span class="media-reels" aria-hidden="true"><i></i><i></i></span><span class="object-meta">audio + video</span><strong>Media</strong>
+            </button>
+            <button class="table-object note-object" type="button" data-open="profile">
+              <span class="object-meta">identità</span><strong>Profilo</strong><small>biografia · curriculum · contatti</small>
+            </button>
+          </div>
+        </section>
+        <aside class="preview-window tile" aria-label="Anteprima del contenuto" aria-live="polite">
+          <div class="window-bar">
+            <span class="window-name">anteprima</span><span class="window-path" id="preview-path">~/cour-de-miracles/README</span><span class="window-status" id="preview-index">00</span>
+          </div>
+          <div class="preview-content" id="preview-content"></div>
+        </aside>
+        <section class="terminal-window tile" aria-label="Terminale interattivo">
+          <div class="window-bar terminal-bar">
+            <span class="window-name">terminale</span><span class="window-path">atelier@courdemiracles:~</span><button class="terminal-clear" type="button" data-command="clear">pulisci</button>
+          </div>
+          <div class="terminal" id="terminal" aria-live="polite" aria-label="Risultati dei comandi">
+            <div class="terminal-output" id="terminal-output"></div>
+            <form class="terminal-form" id="terminal-form" autocomplete="off">
+              <label for="terminal-input"><span>atelier@cdm</span>:<b>~</b>$</label>
+              <input id="terminal-input" name="command" type="text" inputmode="text" spellcheck="false" aria-label="Scrivi un comando" placeholder="help">
+            </form>
+          </div>
+        </section>
+      </section>
 
-  <footer>Cour de Miracles</footer>
-  <script src="js/projects.js?v=1.3.0" defer></script>
+      <section class="workspace workspace-sphere" id="workspace-sphere" data-workspace-panel="sphere" aria-label="Mappa sferica" hidden>
+        <section class="sphere-window tile">
+          <div class="window-bar">
+            <span class="window-name">sfera</span><span class="window-path">~/cour-de-miracles/map --interactive</span><span class="window-status">drag / zoom</span>
+          </div>
+          <div class="sphere-stage">
+            <canvas id="space-canvas" tabindex="0" aria-label="Mappa sferica interattiva. Trascina per ruotare, usa la rotellina per ingrandire, premi Invio per scegliere il nodo frontale."></canvas>
+            <div class="sphere-heading"><span>mappa relazionale</span><h1>Cour de Miracles</h1><p>Trascina per ruotare · rotella per avvicinare · scegli un nodo</p></div>
+            <div class="sphere-legend" aria-hidden="true"><span><i class="node-blue"></i>architettura</span><span><i class="node-green"></i>laboratorio</span><span><i class="node-amber"></i>media</span></div>
+          </div>
+        </section>
+        <aside class="sphere-inspector tile" aria-live="polite">
+          <div class="window-bar">
+            <span class="window-name">nodo</span><span class="window-path" id="sphere-node-path">nessuna selezione</span><span class="window-status">02</span>
+          </div>
+          <div class="inspector-content" id="sphere-inspector-content"></div>
+          <div class="node-list" aria-label="Elenco alternativo dei nodi">
+            <button type="button" data-node="architecture">architettura</button><button type="button" data-node="atlas">atlante</button>
+            <button type="button" data-node="quiz">quiz</button><button type="button" data-node="pixel">pixel</button>
+            <button type="button" data-node="media">media</button><button type="button" data-node="profile">profilo</button>
+          </div>
+        </aside>
+      </section>
+
+      <section class="workspace workspace-collection" id="workspace-portfolio" data-workspace-panel="portfolio" aria-label="Portfolio di architettura" hidden>
+        <section class="collection-window tile">
+          <div class="window-bar"><span class="window-name">portfolio</span><span class="window-path">~/architettura/indice</span><span class="window-status">03</span></div>
+          <header class="collection-heading"><span class="section-code">ARCH / INDEX</span><h1>Portfolio di architettura</h1><p>La struttura è pronta ad accogliere progetti, immagini, tavole e testi. Ogni voce aprirà una scheda autonoma.</p></header>
+          <div class="collection-grid">
+            <button class="collection-card card-blue" type="button" data-open="architecture"><span>01</span><strong>Progetti</strong><small>indice e schede</small></button>
+            <button class="collection-card card-paper" type="button" data-open="drawings"><span>02</span><strong>Disegni</strong><small>piante · sezioni · dettagli</small></button>
+            <button class="collection-card card-amber" type="button" data-open="models"><span>03</span><strong>Modelli</strong><small>fisici e digitali</small></button>
+            <button class="collection-card card-dark" type="button" data-open="documents"><span>04</span><strong>Tavole PDF</strong><small>documenti consultabili</small></button>
+          </div>
+        </section>
+        <aside class="collection-inspector tile">
+          <div class="window-bar"><span class="window-name">struttura</span><span class="window-path">portfolio.schema</span><span class="window-status">ready</span></div>
+          <div class="inspector-content portfolio-guide"><span class="section-code">SCHEDA TIPO</span><h2>Un progetto, una pagina</h2><ol><li><span>01</span>immagine di apertura</li><li><span>02</span>dati e ruolo</li><li><span>03</span>testo critico</li><li><span>04</span>disegni e processo</li></ol></div>
+        </aside>
+      </section>
+
+      <section class="workspace workspace-media" id="workspace-media" data-workspace-panel="media" aria-label="Archivio media" hidden>
+        <section class="media-library tile">
+          <div class="window-bar"><span class="window-name">media</span><span class="window-path">~/media/playlist</span><span class="window-status">04</span></div>
+          <div class="media-heading"><span class="section-code">LISTEN / WATCH</span><h1>Audio e video</h1><p>Area predisposta per integrare SoundCloud e YouTube direttamente nell’atelier.</p></div>
+          <div class="media-tracks">
+            <button type="button" data-open="soundcloud"><span class="track-number">01</span><span><strong>SoundCloud</strong><small>profilo e playlist · collegamento da configurare</small></span><i>audio</i></button>
+            <button type="button" data-open="youtube"><span class="track-number">02</span><span><strong>YouTube</strong><small>video e processi · collegamento da configurare</small></span><i>video</i></button>
+          </div>
+        </section>
+        <aside class="media-monitor tile">
+          <div class="window-bar"><span class="window-name">monitor</span><span class="window-path">nessun contenuto in riproduzione</span><span class="window-status">stopped</span></div>
+          <div class="monitor-screen"><div class="waveform" aria-hidden="true"></div><p>Scegli una sorgente. Quando saranno disponibili i link, il contenuto potrà aprirsi qui senza uscire dal sito.</p></div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="status-bar">
+      <span id="status-message"><i aria-hidden="true"></i> sistema pronto</span><span class="status-center">Cour de Miracles / Unix Atelier / prototipo 02</span><button type="button" id="status-command">Ctrl+K · apri comandi</button>
+    </footer>
+  </div>
+
+  <dialog class="command-palette" id="command-palette" aria-labelledby="palette-title">
+    <div class="palette-head"><span aria-hidden="true">›_</span><label id="palette-title" for="palette-input">Cerca un comando</label><kbd>Esc</kbd></div>
+    <input id="palette-input" type="search" spellcheck="false" autocomplete="off" placeholder="es. apri atlante">
+    <div class="command-list" id="command-list" role="listbox" aria-label="Comandi disponibili"></div>
+    <p class="palette-help">↑ ↓ seleziona · Invio esegue · Esc chiude</p>
+  </dialog>
+  <script src="app.js"></script>
 </body>
 </html>
