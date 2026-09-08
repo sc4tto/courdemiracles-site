@@ -41,13 +41,14 @@ function normalizeScopes(value) {
 export function assertRequiredScopes(scopes) {
   const normalized = normalizeScopes(scopes);
   if (!normalized) upstreamSchema("OpenSea did not return a verifiable token scope set.");
-  const actual = [...new Set(normalized)].sort();
+  const actual = new Set(normalized);
   const expected = [...REQUIRED_OPENSEA_SCOPES].sort();
-  if (actual.length !== expected.length || actual.some((scope, index) => scope !== expected[index])) {
+  const missing = expected.filter((scope) => !actual.has(scope));
+  if (missing.length) {
     throw new ApiError(
       503,
       "OPENSEA_SCOPE_MISMATCH",
-      `The configured OpenSea PAT must contain exactly: ${expected.join(", ")}.`,
+      `The configured OpenSea PAT is missing required scopes: ${missing.join(", ")}.`,
     );
   }
   return expected;
