@@ -33,7 +33,7 @@ function decodeJwtPayload(token) {
 }
 
 function normalizeScopes(value) {
-  if (typeof value === "string") return value.split(/\s+/).filter(Boolean);
+  if (typeof value === "string") return value.split(/[\s,]+/).filter(Boolean);
   if (Array.isArray(value) && value.every((scope) => typeof scope === "string")) return value;
   return null;
 }
