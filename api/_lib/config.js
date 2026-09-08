@@ -100,7 +100,7 @@ export function getAuthConfig() {
   }
   return {
     address,
-    chainId: readInteger("AUTH_CHAIN_ID", 1, 1, Number.MAX_SAFE_INTEGER),
+    chainId: readInteger("AUTH_CHAIN_ID", 8453, 1, Number.MAX_SAFE_INTEGER),
     sessionMinutes: readInteger("AUTH_SESSION_MINUTES", 10, 2, 60),
     origin: getAllowedOrigins()[0],
   };
@@ -128,7 +128,7 @@ export function getOpenSeaConfig({ requireSecrets = true } = {}) {
   }
 
   const dropSlug = process.env.DROP_SLUG || "";
-  const chain = process.env.OPENSEA_CHAIN || "ethereum";
+  const chain = process.env.OPENSEA_CHAIN || "base";
   const contractAddress = process.env.OPENSEA_CONTRACT_ADDRESS || "";
   const shelfTitle = process.env.OPENSEA_SHELF_TITLE || "Pixel Sheet";
   const shelfDescription =

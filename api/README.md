@@ -2,6 +2,8 @@
 
 This directory contains Node.js Vercel Functions for a **single-owner** Pixel Sheet/OpenSea workflow. The browser may request upload credentials and ready-to-sign transaction data, but it never receives the OpenSea API key, scoped PAT, wallet JWT, or a private key. Mint transactions are signed and broadcast only by the user's wallet after explicit confirmation.
 
+The selected target is **Base mainnet** (`OPENSEA_CHAIN=base`, chain ID `8453`). The authorized wallet must hold enough ETH on Base to cover the network fee before a real mint is attempted.
+
 This is a backend beta, not a deployed production service. It does not modify or deploy the existing static website.
 
 ## Authentication model
@@ -37,13 +39,13 @@ Copy `.env.example` to a local `.env` and keep that file untracked. In Vercel, a
 | `COOKIE_SECURE` | yes in production | Must remain `true` over HTTPS. |
 | `COOKIE_SAME_SITE` | yes | Use `Lax` for a same-site API subdomain; use `None` (with `Secure`) when calling a `*.vercel.app` API cross-site. |
 | `ALLOWED_WALLET_ADDRESS` | yes | The only EVM wallet allowed to administer Pixel Sheet; it should own the OpenSea PAT. |
-| `AUTH_CHAIN_ID` | no | Chain ID written into the signed local challenge; default `1`. |
+| `AUTH_CHAIN_ID` | no | Chain ID written into the signed local challenge; default `8453` (Base). |
 | `AUTH_SESSION_MINUTES` | no | Challenge lifetime, 2–60 minutes; default `10`. |
 | `OPENSEA_API_KEY` | yes | Server-side OpenSea API key. |
 | `OPENSEA_SCOPED_PAT` | yes | Server-side scoped PAT with exactly `write:drops write:profile`. Never send it as a bearer token. |
 | `OPENSEA_API_BASE_URL` | no | Defaults to `https://api.opensea.io`; must be an HTTPS origin without a path. |
 | `DROP_SLUG` | yes for media/mint | Creator Studio SelfMint drop slug. |
-| `OPENSEA_CHAIN` | yes for shelf sync | OpenSea chain slug, such as `ethereum`. |
+| `OPENSEA_CHAIN` | yes for shelf sync | OpenSea chain slug; this project uses `base`. |
 | `OPENSEA_CONTRACT_ADDRESS` | yes for media/mint/shelf sync | Contract allowed in the Pixel Sheet shelf; mint preparation fails closed until it is set so completed mints remain eligible for automatic album sync. |
 | `OPENSEA_SHELF_TITLE` | no | Fixed managed shelf title; default `Pixel Sheet`. |
 | `OPENSEA_SHELF_DESCRIPTION` | no | Description used when the managed shelf is first created. |
