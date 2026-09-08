@@ -11,7 +11,7 @@ This is a backend beta, not a deployed production service. It does not modify or
 OpenSea's current authentication separates an API key from wallet authorization:
 
 1. Manually create an OpenSea scoped personal access token (PAT) in **OpenSea → Settings → Developer** for the same wallet configured in `ALLOWED_WALLET_ADDRESS`.
-2. Give the PAT **exactly** the scopes `write:drops` and `write:profile`.
+2. Give the PAT the scopes `write:drops` and `write:profile`.
 3. Store the API key and PAT only as Vercel Sensitive Environment Variables.
 4. The site requests a local wallet challenge from this backend and the browser signs its exact text.
 5. After checking that signature against the allowlisted wallet, the backend exchanges the PAT at `POST /api/v2/auth/tokens/exchange`.
@@ -42,7 +42,7 @@ Copy `.env.example` to a local `.env` and keep that file untracked. In Vercel, a
 | `AUTH_CHAIN_ID` | no | Chain ID written into the signed local challenge; default `8453` (Base). |
 | `AUTH_SESSION_MINUTES` | no | Challenge lifetime, 2–60 minutes; default `10`. |
 | `OPENSEA_API_KEY` | yes | Server-side OpenSea API key. |
-| `OPENSEA_SCOPED_PAT` | yes | Server-side scoped PAT with exactly `write:drops write:profile`. Never send it as a bearer token. |
+| `OPENSEA_SCOPED_PAT` | yes | Server-side scoped PAT containing `write:drops write:profile`. Never send it as a bearer token. |
 | `OPENSEA_API_BASE_URL` | no | Defaults to `https://api.opensea.io`; must be an HTTPS origin without a path. |
 | `DROP_SLUG` | yes for media/mint | Creator Studio SelfMint drop slug. |
 | `OPENSEA_CHAIN` | yes for shelf sync | OpenSea chain slug; this project uses `base`. |
