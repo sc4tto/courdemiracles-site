@@ -1,7 +1,7 @@
 const APP_LINKS = {
   atlas: "https://atlante.courdemiracles.net/",
   quiz: "https://courdemiracles.net/apps/quiz-arte/",
-  pixel: "https://courdemiracles.net/apps/pixel-sheet-converter/",
+  pixel: "/apps/pixel-sheet-converter/",
 };
 
 const contentItems = {
