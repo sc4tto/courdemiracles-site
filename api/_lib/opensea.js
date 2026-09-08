@@ -67,16 +67,21 @@ function parseTokenExchange(value, now = Date.now()) {
 
   const jwt = decodeJwtPayload(value.accessToken);
   const reportedSets = [];
+  if (jwt?.opensea_scopes !== undefined) reportedSets.push(normalizeScopes(jwt.opensea_scopes));
   if (value.tokenScopes !== undefined) reportedSets.push(normalizeScopes(value.tokenScopes));
   if (value.scope !== undefined) reportedSets.push(normalizeScopes(value.scope));
-  if (!reportedSets.length && jwt) {
+  if (jwt?.scope !== undefined || jwt?.scopes !== undefined) {
     reportedSets.push(normalizeScopes(jwt.scope ?? jwt.scopes));
   }
-  if (!reportedSets.length || reportedSets.some((scopes) => scopes === null)) {
-    upstreamSchema("OpenSea did not return a verifiable token scope set.");
-  }
-  const scopes = assertRequiredScopes(reportedSets[0]);
-  for (const set of reportedSets.slice(1)) assertRequiredScopes(set);
+  const validSets = reportedSets.filter((set) => set !== null);
+  if (!validSets.length) upstreamSchema("OpenSea did not return a verifiable token scope set.");
+  const required = new Set(REQUIRED_OPENSEA_SCOPES);
+  const applicationScopes = validSets.find((set) => {
+    const granted = new Set(set);
+    return [...required].every((scope) => granted.has(scope));
+  });
+  const diagnosticScopes = [...new Set(validSets.flat())];
+  const scopes = assertRequiredScopes(applicationScopes || diagnosticScopes);
 
   const expiries = [];
   if (Number.isInteger(value.expiresIn) && value.expiresIn > 0) {
