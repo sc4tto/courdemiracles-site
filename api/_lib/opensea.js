@@ -48,7 +48,7 @@ export function assertRequiredScopes(scopes) {
     throw new ApiError(
       503,
       "OPENSEA_SCOPE_MISMATCH",
-      `The configured OpenSea PAT is missing required scopes: ${missing.join(", ")}.`,
+      `The configured OpenSea PAT is missing required scopes: ${missing.join(", ")}. OpenSea returned: ${[...actual].sort().join(", ") || "(none)"}.`,
     );
   }
   return expected;
