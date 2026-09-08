@@ -50,6 +50,7 @@ function baseEnv(wallet) {
   process.env.COOKIE_SAME_SITE = "Lax";
   process.env.OPENSEA_MOCK_MODE = "true";
   delete process.env.VERCEL_ENV;
+  delete process.env.VERCEL_URL;
   delete process.env.NODE_ENV;
 }
 
@@ -59,6 +60,24 @@ test("CORS configuration rejects wildcards", () => {
     () => getAllowedOrigins(),
     (error) => error instanceof ApiError && error.code === "CONFIGURATION_INVALID",
   );
+});
+
+test("CORS automatically trusts only the current Vercel preview deployment", () => {
+  process.env.ALLOWED_ORIGINS = "https://courdemiracles.net";
+  process.env.VERCEL_ENV = "preview";
+  process.env.VERCEL_URL = "courdemiracles-pixel-sheet-example.vercel.app";
+  assert.deepEqual(getAllowedOrigins(), [
+    "https://courdemiracles.net",
+    "https://courdemiracles-pixel-sheet-example.vercel.app",
+  ]);
+
+  process.env.VERCEL_URL = "attacker.example";
+  assert.throws(
+    () => getAllowedOrigins(),
+    (error) => error instanceof ApiError && error.code === "CONFIGURATION_INVALID",
+  );
+  delete process.env.VERCEL_ENV;
+  delete process.env.VERCEL_URL;
 });
 
 test("AES-GCM cookies reject tampering", () => {

@@ -60,7 +60,19 @@ export function getAllowedOrigins() {
       "ALLOWED_ORIGINS must contain exact origins and cannot contain a wildcard.",
     );
   }
-  return [...new Set(values.map(normalizeOrigin))];
+  const origins = values.map(normalizeOrigin);
+  if (process.env.VERCEL_ENV === "preview" && process.env.VERCEL_URL) {
+    const previewOrigin = normalizeOrigin(`https://${process.env.VERCEL_URL}`);
+    if (!new URL(previewOrigin).hostname.endsWith(".vercel.app")) {
+      throw new ApiError(
+        503,
+        "CONFIGURATION_INVALID",
+        "VERCEL_URL must identify a Vercel preview deployment.",
+      );
+    }
+    origins.push(previewOrigin);
+  }
+  return [...new Set(origins)];
 }
 
 export function isLocalMockEnabled() {
