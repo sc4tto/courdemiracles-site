@@ -3,6 +3,8 @@
 [hidden] { display:none!important; }
 body { margin:0; min-height:100vh; color:var(--ink); background:var(--body-bg); font:16px/1.4 var(--font-ui); transition:color .18s ease,background .18s ease; }
 button, input, select { font:inherit; }
+.ui-icon { width:20px; height:20px; flex:0 0 20px; display:block; fill:currentColor; }
+.file-button,.primary,button,.secondary-link { gap:8px; }
 .app-header { min-height:54px; display:flex; align-items:center; gap:24px; padding:9px 18px; color:var(--header-text); background:linear-gradient(180deg,var(--blue),var(--navy)); border-bottom:2px solid color-mix(in srgb,var(--navy),#000 25%); }
 .brand { color:var(--header-text); font-weight:700; text-decoration:none; }
 .app-header span { opacity:.9; }
