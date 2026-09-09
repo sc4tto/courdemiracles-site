@@ -139,6 +139,25 @@ test("media and SelfMint calls use API key plus wallet JWT and validate flat res
   }
 });
 
+test("SelfMint normalizes a decimal transaction value for the wallet", async () => {
+  const client = createOpenSeaClient({
+    config: config({ chain: "base" }),
+    fetchImpl: async () => response({
+      to: "0x0000000000000000000000000000000000000002",
+      data: "0x1234",
+      value: "0",
+      chain: "base",
+    }),
+  });
+
+  const transaction = await client.prepareSelfMintItem({
+    slug: "pixel-sheet",
+    item: { media_token: "media-token", name: "Work", supply: "1" },
+    accessToken: "wallet-jwt",
+  });
+  assert.equal(transaction.value, "0x0");
+});
+
 test("SelfMint rejects a transaction prepared for a different chain", async () => {
   const client = createOpenSeaClient({
     config: config({ chain: "base" }),
