@@ -185,7 +185,7 @@ export function assertTransaction(value, expectedChain) {
   if (typeof transaction.data !== "string" || !/^0x[0-9a-fA-F]*$/.test(transaction.data)) {
     throw new ApiError(502, "UPSTREAM_SCHEMA_MISMATCH", "OpenSea returned invalid transaction data.");
   }
-  if (typeof transaction.value !== "string" || !/^0x[0-9a-fA-F]+$/.test(transaction.value)) {
+  if (typeof transaction.value !== "string" || !/^(?:0x[0-9a-fA-F]+|[0-9]+)$/.test(transaction.value)) {
     throw new ApiError(502, "UPSTREAM_SCHEMA_MISMATCH", "OpenSea returned an invalid transaction value.");
   }
   if (typeof transaction.chain !== "string" || !SAFE_CHAIN.test(transaction.chain)) {
@@ -198,7 +198,10 @@ export function assertTransaction(value, expectedChain) {
       "OpenSea returned a transaction for a different blockchain.",
     );
   }
-  return transaction;
+  return {
+    ...transaction,
+    value: transaction.value.startsWith("0x") ? transaction.value : `0x${BigInt(transaction.value).toString(16)}`,
+  };
 }
 
 export function shelfSyncInput(body, config) {
