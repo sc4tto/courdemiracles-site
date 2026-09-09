@@ -23,10 +23,10 @@
     "id": "pixel-sheet-converter",
     "titolo": "Pixel Sheet Converter",
     "categoria": "Applicazione desktop",
-    "descrizione": "Converte immagini in matrici di pixel e celle ed esporta i risultati in PNG e XLSX. Versione portatile per Windows 10 e 11 a 64 bit.",
-    "stato": "Disponibile online e per Windows",
+    "descrizione": "Converte immagini in matrici di pixel e celle, offre temi selezionabili e permette la pubblicazione NFT su OpenSea tramite MetaMask.",
+    "stato": "Disponibile online con wallet e OpenSea",
     "repository": "https://github.com/sc4tto/App-Peneluglio_PixelSheetConverter",
-    "app": "apps/pixel-sheet-converter/",
+    "app": "https://courdemiracles-pixel-sheet.vercel.app/apps/pixel-sheet-converter/",
     "download": "https://github.com/sc4tto/App-Peneluglio_PixelSheetConverter/releases/download/v1.2.0/PixelSheetConverter-Windows-x64.zip",
     "featured": true
   },

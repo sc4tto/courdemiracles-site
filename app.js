@@ -1,7 +1,7 @@
 const APP_LINKS = {
   atlas: "https://atlante.courdemiracles.net/",
   quiz: "https://courdemiracles.net/apps/quiz-arte/",
-  pixel: "/apps/pixel-sheet-converter/",
+  pixel: "https://courdemiracles-pixel-sheet.vercel.app/apps/pixel-sheet-converter/",
   irisToroid: "https://www.geogebra.org/m/wnr6bwjd",
   geogebraProfile: "https://www.geogebra.org/u/scat_to",
 };
@@ -110,9 +110,9 @@ const contentItems = {
     index: "10",
     code: "LAB / IMMAGINI",
     title: "Pixel Sheet Converter",
-    description: "Converte immagini in matrici di pixel e celle, con esportazione dei risultati grafici.",
+    description: "Converte immagini in matrici di pixel e celle, con temi selezionabili, collegamento MetaMask e pubblicazione NFT su OpenSea.",
     path: "~/laboratorio/pixel-sheet.web",
-    meta: [["tipo", "strumento web"], ["input", "immagine"], ["stato", "online"], ["output", "griglia + file"]],
+    meta: [["tipo", "strumento web"], ["wallet", "MetaMask"], ["stato", "online"], ["pubblicazione", "OpenSea"]],
     href: APP_LINKS.pixel,
     actionLabel: "Avvia il convertitore",
   },
