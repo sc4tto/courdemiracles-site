@@ -10,11 +10,13 @@
   <script src="app.js" defer></script>
   <script src="nft.js" defer></script>
   <script src="nft-service.js" defer></script>
+  <script src="appearance.js" defer></script>
 </head>
 <body>
   <header class="app-header">
     <a href="../../" class="brand">Cour de Miracles</a>
     <span>Pixel Sheet Converter</span>
+    <button id="theme-button" class="theme-button" type="button" aria-haspopup="dialog" aria-controls="theme-dialog">TEMA</button>
   </header>
 
   <main class="workspace">
@@ -89,6 +91,23 @@
       <div id="stats-view" class="view"><div id="stats"></div></div>
     </section>
   </main>
+
+  <dialog id="theme-dialog" class="theme-dialog" aria-labelledby="theme-dialog-title">
+    <form method="dialog" class="theme-form">
+      <header class="theme-dialog-header">
+        <div>
+          <p class="eyebrow">Aspetto dell’interfaccia</p>
+          <h2 id="theme-dialog-title">Scegli un tema</h2>
+        </div>
+        <button class="icon-button" value="cancel" aria-label="Chiudi la finestra">×</button>
+      </header>
+      <div id="theme-list" class="theme-list" role="radiogroup" aria-label="Temi disponibili"></div>
+      <footer class="theme-dialog-footer">
+        <span id="theme-current" aria-live="polite"></span>
+        <button value="cancel">Chiudi</button>
+      </footer>
+    </form>
+  </dialog>
 
   <dialog id="nft-dialog" class="nft-dialog" aria-labelledby="nft-dialog-title" aria-describedby="nft-dialog-description">
     <form id="nft-form" class="nft-form">
