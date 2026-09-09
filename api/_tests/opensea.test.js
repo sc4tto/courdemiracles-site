@@ -62,11 +62,32 @@ test("PAT exchange stays server-side and validates exact scopes and expiry", asy
   });
 });
 
-test("scope validation fails closed for extra or missing OpenSea permissions", () => {
-  assert.throws(
-    () => assertRequiredScopes(["write:drops", "write:profile", "write:orders"]),
-    (error) => error instanceof ApiError && error.code === "OPENSEA_SCOPE_MISMATCH",
+test("PAT exchange reads application permissions from the OpenSea JWT claim", async () => {
+  const accessToken = jwt({
+    exp: Math.floor(Date.now() / 1000) + 3600,
+    opensea_scopes: REQUIRED,
+    scope: "openid profile urn:zitadel:iam:org:projects:roles",
+  });
+  const client = createOpenSeaClient({
+    config: config(),
+    fetchImpl: async () => response({
+      accessToken,
+      tokenType: "Bearer",
+      expiresIn: 1800,
+      tokenScopes: ["openid", "profile", "urn:zitadel:iam:org:projects:roles"],
+    }),
+  });
+
+  const result = await client.exchangeScopedPat();
+  assert.deepEqual(result.scopes, [...REQUIRED].sort());
+});
+
+test("scope validation accepts provider scopes but fails closed for missing permissions", () => {
+  assert.deepEqual(
+    assertRequiredScopes(["write:drops", "write:profile", "openid"]),
+    REQUIRED,
   );
+  assert.deepEqual(assertRequiredScopes("write:drops,write:profile"), REQUIRED);
   assert.throws(
     () => assertRequiredScopes(["write:drops"]),
     (error) => error instanceof ApiError && error.code === "OPENSEA_SCOPE_MISMATCH",
@@ -150,6 +171,20 @@ test("upstream errors never expose OpenSea response bodies", async () => {
       assert.equal(error.status, 403);
       assert.equal(error.code, "OPENSEA_REQUEST_FAILED");
       assert.doesNotMatch(error.message, /sensitive/);
+      return true;
+    },
+  );
+});
+
+test("upstream errors expose only short safe validation messages", async () => {
+  const client = createOpenSeaClient({
+    config: config(),
+    fetchImpl: async () => response({ message: "Supply must be a decimal string." }, 400),
+  });
+  await assert.rejects(
+    () => client.getProfileShelves("0x0000000000000000000000000000000000000001"),
+    (error) => {
+      assert.equal(error.details.upstreamMessage, "Supply must be a decimal string.");
       return true;
     },
   );
