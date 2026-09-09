@@ -205,11 +205,14 @@ kbd {
 }
 
 .tree-row:hover, .tree-row.is-selected { background: #343b35; }
+.folder-row:focus-visible { outline: 1px solid var(--green); outline-offset: -2px; }
+.folder-row.is-expanded { background: rgba(158, 208, 174, .055); }
 .tree-row.is-selected { box-shadow: inset 3px 0 0 var(--green); color: #fff; }
 .tree-row small { color: #6f7871; font-size: .75rem; }
 .child-row { grid-template-columns: 16px 18px minmax(0, 1fr); padding-left: 27px; color: #aeb6af; font-size: .75rem; }
 .child-row::before { content: ""; width: 1px; height: 100%; justify-self: center; background: #444c46; }
 .tree-twist { color: #7d877f; }
+.tree-group[hidden] { display: none !important; }
 
 .folder-glyph {
   width: 14px;
