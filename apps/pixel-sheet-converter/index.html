@@ -10,18 +10,21 @@
   <script src="app.js" defer></script>
   <script src="nft.js" defer></script>
   <script src="nft-service.js" defer></script>
+  <script src="appearance.js" defer></script>
 </head>
 <body>
   <header class="app-header">
     <a href="../../" class="brand">Cour de Miracles</a>
     <span>Pixel Sheet Converter</span>
+    <span class="window-controls" aria-hidden="true"><i></i><i></i><i></i></span>
+    <button id="theme-button" class="theme-button" type="button" aria-haspopup="dialog" aria-controls="theme-dialog"><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#theme"></use></svg><span>TEMA</span></button>
   </header>
 
   <main class="workspace">
     <aside class="controls" aria-label="Impostazioni di conversione">
       <section class="panel">
         <h1>1. Immagine</h1>
-        <label class="file-button" for="image-input">Apri immagine</label>
+        <label class="file-button" for="image-input"><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#folder"></use></svg><span>Apri immagine</span></label>
         <input id="image-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
         <p id="file-name" class="hint">Nessuna immagine selezionata</p>
       </section>
@@ -69,12 +72,12 @@
         </select>
       </section>
 
-      <button id="convert" class="primary" disabled>Genera anteprima</button>
+      <button id="convert" class="primary" disabled><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#tune"></use></svg><span>Genera anteprima</span></button>
       <div class="export-row">
-        <button id="save-png" disabled>Esporta PNG</button>
+        <button id="save-png" disabled><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#image"></use></svg><span>Esporta PNG</span></button>
         <a class="secondary-link" href="https://github.com/sc4tto/App-Peneluglio_PixelSheetConverter/releases/download/v1.2.0/PixelSheetConverter-Windows-x64.zip">Versione Windows</a>
       </div>
-      <button id="create-nft" class="nft-button" type="button" hidden disabled>Crea NFT</button>
+      <button id="create-nft" class="nft-button" type="button" hidden disabled><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#upload"></use></svg><span>Crea NFT</span></button>
       <p id="status" class="status" role="status">Pronto</p>
     </aside>
 
@@ -89,6 +92,23 @@
       <div id="stats-view" class="view"><div id="stats"></div></div>
     </section>
   </main>
+
+  <dialog id="theme-dialog" class="theme-dialog" aria-labelledby="theme-dialog-title">
+    <form method="dialog" class="theme-form">
+      <header class="theme-dialog-header">
+        <div>
+          <p class="eyebrow">Aspetto dell’interfaccia</p>
+          <h2 id="theme-dialog-title">Scegli un tema</h2>
+        </div>
+        <button class="icon-button" value="cancel" aria-label="Chiudi la finestra">×</button>
+      </header>
+      <div id="theme-list" class="theme-list" role="radiogroup" aria-label="Temi disponibili"></div>
+      <footer class="theme-dialog-footer">
+        <span id="theme-current" aria-live="polite"></span>
+        <button value="cancel">Chiudi</button>
+      </footer>
+    </form>
+  </dialog>
 
   <dialog id="nft-dialog" class="nft-dialog" aria-labelledby="nft-dialog-title" aria-describedby="nft-dialog-description">
     <form id="nft-form" class="nft-form">
