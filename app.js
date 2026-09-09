@@ -2,6 +2,8 @@ const APP_LINKS = {
   atlas: "https://atlante.courdemiracles.net/",
   quiz: "https://courdemiracles.net/apps/quiz-arte/",
   pixel: "/apps/pixel-sheet-converter/",
+  irisToroid: "https://www.geogebra.org/m/wnr6bwjd",
+  geogebraProfile: "https://www.geogebra.org/u/scat_to",
 };
 
 const contentItems = {
@@ -55,8 +57,28 @@ const contentItems = {
     workspace: "portfolio",
     workspaceLabel: "Apri il portfolio",
   },
-  laboratory: {
+  irisToroid: {
     index: "05",
+    code: "ARCH / GEOMETRIA PARAMETRICA",
+    title: "Iris Toroid",
+    description: "Costruzione geometrica parametrica tridimensionale, consultabile e modificabile interattivamente in GeoGebra.",
+    path: "~/architettura/iris-toroid.ggb",
+    meta: [["tipo", "modello parametrico 3D"], ["piattaforma", "GeoGebra"], ["autore", "scaT_To"], ["stato", "interattivo"]],
+    href: APP_LINKS.irisToroid,
+    actionLabel: "Esplora Iris Toroid",
+  },
+  geogebraProfile: {
+    index: "06",
+    code: "ARCH / ARCHIVIO PARAMETRICO",
+    title: "Archivio GeoGebra",
+    description: "Indice generale delle costruzioni geometriche e dei modelli parametrici pubblicati nel profilo GeoGebra scaT_To.",
+    path: "~/architettura/geogebra.index",
+    meta: [["tipo", "archivio esterno"], ["contenuti", "costruzioni GeoGebra"], ["profilo", "scaT_To"], ["stato", "in aggiornamento"]],
+    href: APP_LINKS.geogebraProfile,
+    actionLabel: "Apri il profilo GeoGebra",
+  },
+  laboratory: {
+    index: "07",
     code: "LAB / APPLICAZIONI",
     title: "Laboratorio",
     description: "Il nucleo operativo raccoglie le applicazioni già utilizzabili e i prototipi ancora in sviluppo.",
@@ -65,7 +87,7 @@ const contentItems = {
     children: ["atlas", "quiz", "pixel", "trace"],
   },
   atlas: {
-    index: "06",
+    index: "08",
     code: "LAB / WEB APP",
     title: "Atlante storico",
     description: "Atlante interattivo per esplorare epoche, aree geografiche, città e documenti attraverso una struttura visuale.",
@@ -75,7 +97,7 @@ const contentItems = {
     actionLabel: "Avvia l’atlante",
   },
   quiz: {
-    index: "07",
+    index: "09",
     code: "LAB / DIDATTICA",
     title: "Quiz di storia dell’arte",
     description: "Applicazione interattiva per lo studio e il riconoscimento di 73 opere di storia dell’arte.",
@@ -85,7 +107,7 @@ const contentItems = {
     actionLabel: "Avvia il quiz",
   },
   pixel: {
-    index: "08",
+    index: "10",
     code: "LAB / IMMAGINI",
     title: "Pixel Sheet Converter",
     description: "Converte immagini in matrici di pixel e celle, con esportazione dei risultati grafici.",
@@ -95,7 +117,7 @@ const contentItems = {
     actionLabel: "Avvia il convertitore",
   },
   trace: {
-    index: "09",
+    index: "11",
     code: "LAB / PROTOTIPO",
     title: "Trace Sheet Studio",
     description: "Strumento in sviluppo per l’analisi e la vettorializzazione di immagini e disegni.",
@@ -103,7 +125,7 @@ const contentItems = {
     meta: [["tipo", "prototipo"], ["ambito", "immagini"], ["stato", "in sviluppo"], ["accesso", "non pubblicato"]],
   },
   profile: {
-    index: "10",
+    index: "12",
     code: "PROFILE / IDENTITÀ",
     title: "Profilo",
     description: "Spazio predisposto per biografia, curriculum, competenze, contatti e collegamenti ai profili esterni.",
@@ -111,7 +133,7 @@ const contentItems = {
     meta: [["documenti", "biografia + CV"], ["contatti", "da inserire"], ["social", "da collegare"], ["stato", "struttura pronta"]],
   },
   media: {
-    index: "11",
+    index: "13",
     code: "MEDIA / INDEX",
     title: "Audio e video",
     description: "Workspace pensato per raccogliere tracce SoundCloud, video YouTube e sperimentazioni audiovisive senza interrompere la navigazione.",
@@ -121,7 +143,7 @@ const contentItems = {
     workspaceLabel: "Apri media",
   },
   soundcloud: {
-    index: "12",
+    index: "14",
     code: "MEDIA / AUDIO",
     title: "SoundCloud",
     description: "Il lettore verrà collegato qui quando sarà disponibile l’indirizzo del profilo o della playlist.",
@@ -129,7 +151,7 @@ const contentItems = {
     meta: [["sorgente", "SoundCloud"], ["modalità", "player incorporato"], ["link", "da configurare"], ["stato", "in attesa"]],
   },
   youtube: {
-    index: "13",
+    index: "15",
     code: "MEDIA / VIDEO",
     title: "YouTube",
     description: "I video potranno essere riprodotti in questo workspace quando sarà disponibile l’indirizzo del canale o della playlist.",
