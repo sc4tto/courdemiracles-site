@@ -4,12 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Converti immagini in griglie di celle usando palette e dithering direttamente nel browser.">
-  <meta name="pixel-nft-api-base" content="">
   <title>Pixel Sheet Converter — Cour de Miracles</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
-  <script src="nft.js" defer></script>
-  <script src="nft-service.js" defer></script>
 </head>
 <body>
   <header class="app-header">
@@ -19,6 +16,15 @@
 
   <main class="workspace">
     <aside class="controls" aria-label="Impostazioni di conversione">
+      <section class="panel fields appearance-panel">
+        <h1>Interfaccia</h1>
+        <label for="theme-select">Tema</label>
+        <select id="theme-select"></select>
+        <label class="theme-import" for="theme-input">Importa tema JSON</label>
+        <input id="theme-input" type="file" accept="application/json,.json">
+        <p id="theme-status" class="hint">I temi personali vengono salvati solo in questo browser.</p>
+      </section>
+
       <section class="panel">
         <h1>1. Immagine</h1>
         <label class="file-button" for="image-input">Apri immagine</label>
@@ -74,7 +80,6 @@
         <button id="save-png" disabled>Esporta PNG</button>
         <a class="secondary-link" href="https://github.com/sc4tto/App-Peneluglio_PixelSheetConverter/releases/download/v1.2.0/PixelSheetConverter-Windows-x64.zip">Versione Windows</a>
       </div>
-      <button id="create-nft" class="nft-button" type="button" hidden disabled>Crea NFT</button>
       <p id="status" class="status" role="status">Pronto</p>
     </aside>
 
@@ -89,90 +94,5 @@
       <div id="stats-view" class="view"><div id="stats"></div></div>
     </section>
   </main>
-
-  <dialog id="nft-dialog" class="nft-dialog" aria-labelledby="nft-dialog-title" aria-describedby="nft-dialog-description">
-    <form id="nft-form" class="nft-form">
-      <header class="nft-dialog-header">
-        <div>
-          <p class="eyebrow">Pubblicazione guidata</p>
-          <h2 id="nft-dialog-title">Crea NFT da Pixel Sheet</h2>
-        </div>
-        <button id="nft-dialog-close" class="icon-button" type="button" aria-label="Chiudi la finestra">×</button>
-      </header>
-
-      <p id="nft-dialog-description" class="nft-intro">
-        Controlla immagine e metadati. “Carica e prepara” invia il PNG e i dati a OpenSea, ma non crea ancora la NFT e non invia transazioni. Firma e creazione richiedono un secondo clic esplicito e la tua conferma nel wallet.
-      </p>
-
-      <div class="nft-layout">
-        <section class="nft-preview-panel" aria-labelledby="nft-preview-title">
-          <h3 id="nft-preview-title">Anteprima convertita</h3>
-          <div class="nft-preview-frame">
-            <img id="nft-preview" alt="Anteprima dell’immagine convertita da pubblicare come NFT">
-          </div>
-          <p id="nft-image-info" class="hint">—</p>
-        </section>
-
-        <section class="nft-fields" aria-labelledby="nft-details-title">
-          <h3 id="nft-details-title">Dettagli</h3>
-
-          <label for="nft-title">Titolo <span aria-hidden="true">*</span></label>
-          <input id="nft-title" name="title" type="text" maxlength="100" required autocomplete="off">
-
-          <label for="nft-description">Descrizione</label>
-          <textarea id="nft-description" name="description" rows="4" maxlength="1000"></textarea>
-
-          <div class="nft-fixed-fields">
-            <div>
-              <label for="nft-supply">Quantità</label>
-              <input id="nft-supply" name="supply" type="number" value="1" min="1" max="1" readonly>
-            </div>
-            <div>
-              <label for="nft-shelf">Album OpenSea</label>
-              <input id="nft-shelf" name="shelf" type="text" value="Pixel Sheet" readonly>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <section class="wallet-card" aria-labelledby="wallet-title">
-        <div>
-          <h3 id="wallet-title">Wallet</h3>
-          <p id="wallet-status" class="wallet-status" role="status" aria-live="polite">Wallet non collegato</p>
-        </div>
-        <button id="connect-wallet" type="button">Collega wallet</button>
-      </section>
-
-      <section class="nft-progress" aria-labelledby="nft-progress-title">
-        <h3 id="nft-progress-title">Avanzamento</h3>
-        <ol id="nft-stages" class="nft-stages">
-          <li data-stage="preview"><span>1</span><div><strong>Anteprima</strong><small>Immagine convertita pronta</small></div></li>
-          <li data-stage="wallet"><span>2</span><div><strong>Wallet</strong><small>Da collegare</small></div></li>
-          <li data-stage="metadata"><span>3</span><div><strong>Metadati</strong><small>Da verificare</small></div></li>
-          <li data-stage="publish"><span>4</span><div><strong>Pubblicazione</strong><small>Richiederà conferma</small></div></li>
-          <li data-stage="shelf"><span>5</span><div><strong>Album Pixel Sheet</strong><small>Sincronizzazione successiva</small></div></li>
-        </ol>
-        <p id="nft-action-status" class="nft-action-status" role="status" aria-live="polite">Completa i dati e collega il wallet.</p>
-      </section>
-
-      <section id="nft-transaction-summary" class="nft-transaction-summary" aria-labelledby="nft-transaction-title" hidden>
-        <h3 id="nft-transaction-title">Controllo prima della firma</h3>
-        <p>Confronta questi dati con quelli mostrati dal wallet prima di confermare.</p>
-        <dl>
-          <div><dt>Rete</dt><dd id="nft-transaction-chain">—</dd></div>
-          <div><dt>Contratto</dt><dd><code id="nft-transaction-to">—</code></dd></div>
-          <div><dt>Valore</dt><dd id="nft-transaction-value">—</dd></div>
-          <div id="nft-transaction-hash-row" class="nft-transaction-hash" hidden><dt>Hash transazione</dt><dd><code id="nft-transaction-hash">—</code></dd></div>
-        </dl>
-      </section>
-
-      <footer class="nft-actions">
-        <button id="nft-dialog-cancel" type="button">Annulla</button>
-        <button id="sync-nft-shelf" type="button" hidden disabled>Riprova album</button>
-        <button id="prepare-nft" class="primary nft-primary" type="submit" disabled>Carica e prepara</button>
-        <button id="publish-nft" class="primary nft-primary nft-publish" type="button" hidden disabled>Crea NFT e firma</button>
-      </footer>
-    </form>
-  </dialog>
 </body>
 </html>
