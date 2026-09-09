@@ -96,7 +96,8 @@
       const remote=payload?.error||{};
       if(response.status===401||remote.code==='SESSION_REQUIRED')resetAuthentication();
       const upstreamStatus=remote?.details?.upstreamStatus;
-      const diagnostic=Number.isInteger(upstreamStatus)?` [${path}: OpenSea HTTP ${upstreamStatus}]`:'';
+      const upstreamMessage=typeof remote?.details?.upstreamMessage==='string'?`: ${remote.details.upstreamMessage}`:'';
+      const diagnostic=Number.isInteger(upstreamStatus)?` [${path}: OpenSea HTTP ${upstreamStatus}${upstreamMessage}]`:'';
       throw new ServiceError(remote.code||'SERVICE_ERROR',`${remote.message||`Richiesta non riuscita (${response.status}).`}${diagnostic}`,{status:response.status});
     }
     return payload;
