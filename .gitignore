@@ -2,3 +2,9 @@
 Thumbs.db
 *.tmp
 *.bak
+.env
+.env.*
+!.env.example
+node_modules/
+.vercel/
+coverage/
