@@ -155,6 +155,34 @@ let lastPreview = "readme";
 let commandHistory = [];
 let historyIndex = 0;
 
+const folderRows = [...document.querySelectorAll("[data-folder]")];
+
+function setFolderExpanded(row, expanded, persist = true) {
+  const group = document.getElementById(row.getAttribute("aria-controls"));
+  if (!group) return;
+  row.setAttribute("aria-expanded", String(expanded));
+  row.classList.toggle("is-expanded", expanded);
+  row.querySelector(".tree-twist").textContent = expanded ? "⌄" : "›";
+  group.hidden = !expanded;
+  if (persist) {
+    try { sessionStorage.setItem(`cdm-folder-${row.dataset.folder}`, expanded ? "open" : "closed"); } catch { /* storage facoltativo */ }
+  }
+}
+
+folderRows.forEach((row) => {
+  let expanded = row.getAttribute("aria-expanded") === "true";
+  try {
+    const saved = sessionStorage.getItem(`cdm-folder-${row.dataset.folder}`);
+    if (saved) expanded = saved === "open";
+  } catch { /* mantieni lo stato iniziale */ }
+  setFolderExpanded(row, expanded, false);
+  row.addEventListener("click", () => setFolderExpanded(row, row.getAttribute("aria-expanded") !== "true"));
+  row.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") { event.preventDefault(); setFolderExpanded(row, true); }
+    if (event.key === "ArrowLeft") { event.preventDefault(); setFolderExpanded(row, false); }
+  });
+});
+
 function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, (character) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
