@@ -171,14 +171,52 @@ const terminalOutput = document.querySelector("#terminal-output");
 const terminalForm = document.querySelector("#terminal-form");
 const terminalInput = document.querySelector("#terminal-input");
 
-document.querySelectorAll(".resizable-window .window-bar").forEach(bar => {
-  bar.title = "Trascina l’angolo inferiore destro per ridimensionare · doppio clic per ripristinare";
-  bar.addEventListener("dblclick", () => {
-    const panel = bar.closest(".resizable-window");
-    panel.style.removeProperty("width");
-    panel.style.removeProperty("height");
-    window.dispatchEvent(new Event("resize"));
-    announce("dimensioni della finestra ripristinate");
+const tileDefaults = { archive: 230, preview: 330, terminal: 190 };
+function setTileSize(name, value) {
+  if (name === "archive") {
+    document.querySelector(".desktop-body").style.setProperty("--archive-width", `${Math.max(175, Math.min(420, value))}px`);
+  } else if (name === "preview") {
+    const maximum = Math.max(280, document.querySelector(".workspace-desk").clientWidth - 420);
+    document.querySelector(".workspace-desk").style.setProperty("--preview-width", `${Math.max(280, Math.min(maximum, value))}px`);
+  } else {
+    const maximum = Math.max(110, document.querySelector(".workspace-desk").clientHeight - 260);
+    document.querySelector(".workspace-desk").style.setProperty("--terminal-height", `${Math.max(110, Math.min(maximum, value))}px`);
+  }
+  window.dispatchEvent(new Event("resize"));
+}
+document.querySelectorAll("[data-tile-resize]").forEach(handle => {
+  const name = handle.dataset.tileResize;
+  handle.addEventListener("pointerdown", event => {
+    if (window.innerWidth <= 900) return;
+    event.preventDefault();
+    handle.setPointerCapture(event.pointerId);
+    handle.classList.add("is-dragging");
+    document.body.classList.add("is-tile-resizing");
+    document.body.dataset.axis = name === "terminal" ? "y" : "x";
+  });
+  handle.addEventListener("pointermove", event => {
+    if (!handle.hasPointerCapture(event.pointerId)) return;
+    const workspace = document.querySelector(".workspace-desk").getBoundingClientRect();
+    const value = name === "archive" ? event.clientX : name === "preview" ? workspace.right - event.clientX : workspace.bottom - event.clientY;
+    setTileSize(name, value);
+  });
+  const finish = event => {
+    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+    handle.classList.remove("is-dragging");
+    document.body.classList.remove("is-tile-resizing");
+    delete document.body.dataset.axis;
+  };
+  handle.addEventListener("pointerup", finish);
+  handle.addEventListener("pointercancel", finish);
+  handle.addEventListener("dblclick", () => setTileSize(name, tileDefaults[name]));
+  handle.addEventListener("keydown", event => {
+    const keys = name === "terminal" ? ["ArrowUp", "ArrowDown"] : ["ArrowLeft", "ArrowRight"];
+    if (!keys.includes(event.key)) return;
+    event.preventDefault();
+    const current = name === "archive" ? document.querySelector(".file-browser").offsetWidth : name === "preview" ? document.querySelector(".preview-window").offsetWidth : document.querySelector(".terminal-window").offsetHeight;
+    const positive = event.key === "ArrowRight" || event.key === "ArrowDown";
+    const direction = name === "archive" ? (positive ? 1 : -1) : (positive ? -1 : 1);
+    setTileSize(name, current + direction * 10);
   });
 });
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");

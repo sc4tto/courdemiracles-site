@@ -29,7 +29,7 @@
     </header>
 
     <main class="desktop-body">
-      <aside class="file-browser tile resizable-window" aria-label="Archivio dei contenuti">
+      <aside class="file-browser tile" aria-label="Archivio dei contenuti">
         <div class="window-bar">
           <span class="window-name">archivio</span>
           <span class="window-path">~/cour-de-miracles</span>
@@ -72,10 +72,11 @@
           <span>8 elementi</span>
           <button type="button" data-command="help">guida</button>
         </div>
+        <span class="tile-resizer tile-resizer-right" role="separator" aria-label="Ridimensiona archivio e area di lavoro" aria-orientation="vertical" tabindex="0" data-tile-resize="archive"></span>
       </aside>
 
       <section class="workspace workspace-desk is-active" id="workspace-desk" data-workspace-panel="desk" aria-label="Tavolo di lavoro">
-        <section class="atelier-window tile resizable-window">
+        <section class="atelier-window tile">
           <div class="window-bar">
             <span class="window-name">tavolo</span>
             <span class="window-path">~/cour-de-miracles/atelier</span>
@@ -103,13 +104,14 @@
             </button>
           </div>
         </section>
-        <aside class="preview-window tile resizable-window" aria-label="Anteprima del contenuto" aria-live="polite">
+        <aside class="preview-window tile" aria-label="Anteprima del contenuto" aria-live="polite">
           <div class="window-bar">
             <span class="window-name">anteprima</span><span class="window-path" id="preview-path">~/cour-de-miracles/README</span><span class="window-status" id="preview-index">00</span>
           </div>
           <div class="preview-content" id="preview-content"></div>
+          <span class="tile-resizer tile-resizer-left" role="separator" aria-label="Ridimensiona tavolo e anteprima" aria-orientation="vertical" tabindex="0" data-tile-resize="preview"></span>
         </aside>
-        <section class="terminal-window tile resizable-window" aria-label="Terminale interattivo">
+        <section class="terminal-window tile" aria-label="Terminale interattivo">
           <div class="window-bar terminal-bar">
             <span class="window-name">terminale</span><span class="window-path">atelier@courdemiracles:~</span><button class="terminal-clear" type="button" data-command="clear">pulisci</button>
           </div>
@@ -120,6 +122,7 @@
               <input id="terminal-input" name="command" type="text" inputmode="text" spellcheck="false" aria-label="Scrivi un comando" placeholder="help">
             </form>
           </div>
+          <span class="tile-resizer tile-resizer-top" role="separator" aria-label="Ridimensiona area superiore e terminale" aria-orientation="horizontal" tabindex="0" data-tile-resize="terminal"></span>
         </section>
       </section>
 
