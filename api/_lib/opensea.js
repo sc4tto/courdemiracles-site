@@ -48,7 +48,7 @@ export function assertRequiredScopes(scopes) {
     throw new ApiError(
       503,
       "OPENSEA_SCOPE_MISMATCH",
-      `The configured OpenSea PAT is missing required scopes: ${missing.join(", ")}. OpenSea returned: ${[...actual].sort().join(", ") || "(none)"}.`,
+      `The configured OpenSea PAT is missing required scopes: ${missing.join(", ")}.`,
     );
   }
   return expected;
@@ -154,9 +154,40 @@ function mapUpstreamStatus(status) {
   return FORWARDED_STATUSES.has(status) ? status : 502;
 }
 
-function upstreamError(status, retryAfter) {
+function sanitizeUpstreamMessage(value) {
+  if (typeof value !== "string") return null;
+  const normalized = value.replace(/[\u0000-\u001f\u007f]+/g, " ").replace(/\s+/g, " ").trim();
+  if (!normalized || normalized.length > 300) return null;
+  if (/https?:\/\//i.test(normalized) || /bearer\s|api[-_ ]?key|token|secret|authorization/i.test(normalized)) return null;
+  if (/[A-Za-z0-9_-]{24,}\.[A-Za-z0-9_-]{24,}/.test(normalized)) return null;
+  return normalized;
+}
+
+async function safeUpstreamMessage(response) {
+  let value;
+  try {
+    const text = await response.text();
+    if (!text || text.length > 4096) return null;
+    value = JSON.parse(text);
+  } catch {
+    return null;
+  }
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  for (const candidate of [value.message, value.detail, value.error]) {
+    const safe = sanitizeUpstreamMessage(candidate);
+    if (safe) return safe;
+  }
+  if (Array.isArray(value.errors)) {
+    const safe = value.errors.map(sanitizeUpstreamMessage).filter(Boolean).slice(0, 3).join("; ");
+    if (safe) return safe;
+  }
+  return null;
+}
+
+function upstreamError(status, retryAfter, upstreamMessage) {
   const details = { upstreamStatus: status };
   if (retryAfter && /^\d{1,6}$/.test(retryAfter)) details.retryAfter = Number(retryAfter);
+  if (upstreamMessage) details.upstreamMessage = upstreamMessage;
   return new ApiError(
     mapUpstreamStatus(status),
     status === 429 ? "OPENSEA_RATE_LIMITED" : "OPENSEA_REQUEST_FAILED",
@@ -249,7 +280,10 @@ export function createOpenSeaClient({ fetchImpl = globalThis.fetch, config = get
       }
       throw new ApiError(502, "OPENSEA_UNAVAILABLE", "OpenSea could not be reached.");
     }
-    if (!response.ok) throw upstreamError(response.status, response.headers?.get?.("retry-after"));
+    if (!response.ok) {
+      const message = await safeUpstreamMessage(response);
+      throw upstreamError(response.status, response.headers?.get?.("retry-after"), message);
+    }
     return parseJsonResponse(response);
   }
 
