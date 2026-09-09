@@ -447,6 +447,28 @@ const sphereNodes = [
   { id: "documents", title: "Documenti", lat: -.82, lon: -.7, color: "#6fa9bc" },
 ];
 
+const sphereAssets = [
+  {
+    id: "voxel-tree",
+    lat: .28,
+    lon: .82,
+    voxels: [
+      { x: 0, y: 0, z: .05, color: "#725038" },
+      { x: 0, y: 0, z: 1.05, color: "#835b3c" },
+      { x: 0, y: 0, z: 2.05, color: "#916742" },
+      { x: -1, y: 0, z: 3.05, color: "#477553" },
+      { x: 0, y: 0, z: 3.05, color: "#5b9464" },
+      { x: 1, y: 0, z: 3.05, color: "#477553" },
+      { x: 0, y: -1, z: 3.05, color: "#3f684a" },
+      { x: 0, y: 1, z: 3.05, color: "#69a672" },
+      { x: -1, y: 0, z: 4.05, color: "#54895e" },
+      { x: 0, y: 0, z: 4.05, color: "#72ad78" },
+      { x: 1, y: 0, z: 4.05, color: "#54895e" },
+      { x: 0, y: 0, z: 5.05, color: "#65a16e" },
+    ],
+  },
+];
+
 function showSphereNode(id) {
   const item = contentItems[id] || contentItems.readme;
   document.querySelector("#sphere-node-path").textContent = item.path;
@@ -506,6 +528,66 @@ function createSphere(canvas, options = {}) {
     ctx.stroke();
   }
 
+  function drawVoxel(x, y, size, color, alpha) {
+    const top = shadeColor(color, 26);
+    const left = shadeColor(color, -18);
+    const right = shadeColor(color, -34);
+    const half = size * .58;
+    const rise = size * .34;
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = top;
+    ctx.beginPath();
+    ctx.moveTo(x, y - rise); ctx.lineTo(x + half, y); ctx.lineTo(x, y + rise); ctx.lineTo(x - half, y); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = left;
+    ctx.beginPath();
+    ctx.moveTo(x - half, y); ctx.lineTo(x, y + rise); ctx.lineTo(x, y + rise + size * .55); ctx.lineTo(x - half, y + size * .55); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = right;
+    ctx.beginPath();
+    ctx.moveTo(x + half, y); ctx.lineTo(x, y + rise); ctx.lineTo(x, y + rise + size * .55); ctx.lineTo(x + half, y + size * .55); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "rgba(9,15,11,.55)";
+    ctx.lineWidth = Math.max(.45, size * .055);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function shadeColor(hex, amount) {
+    const value = Number.parseInt(hex.slice(1), 16);
+    const channel = (shift) => Math.max(0, Math.min(255, (value >> shift & 255) + amount));
+    return `rgb(${channel(16)},${channel(8)},${channel(0)})`;
+  }
+
+  function drawSphereAssets(cx, cy, radius) {
+    sphereAssets.forEach((asset) => {
+      const cl = Math.cos(asset.lat), sl = Math.sin(asset.lat);
+      const so = Math.sin(asset.lon), co = Math.cos(asset.lon);
+      const outward = { x: cl * so, y: sl, z: cl * co };
+      const east = { x: co, y: 0, z: -so };
+      const north = { x: -sl * so, y: cl, z: -sl * co };
+      const unit = .042;
+      const blocks = asset.voxels.map((voxel) => {
+        const altitude = 1.015 + voxel.z * unit;
+        const point = rotatePoint(
+          outward.x * altitude + east.x * voxel.x * unit + north.x * voxel.y * unit,
+          outward.y * altitude + east.y * voxel.x * unit + north.y * voxel.y * unit,
+          outward.z * altitude + east.z * voxel.x * unit + north.z * voxel.y * unit,
+        );
+        const perspective = 1 + point.z * .12;
+        return { ...voxel, point, perspective };
+      }).sort((a, b) => a.point.z - b.point.z || a.z - b.z);
+      blocks.forEach((block) => {
+        if (block.point.z < -.16) return;
+        const alpha = Math.max(.18, Math.min(1, (block.point.z + .25) / .85));
+        drawVoxel(
+          cx + block.point.x * radius * block.perspective,
+          cy - block.point.y * radius * block.perspective,
+          radius * unit * block.perspective * (interactive ? 1.2 : 1.05),
+          block.color,
+          alpha,
+        );
+      });
+    });
+  }
+
   function draw() {
     const { width, height } = state;
     if (!width || !height) return;
@@ -534,6 +616,7 @@ function createSphere(canvas, options = {}) {
       for (let lat = -Math.PI / 2; lat <= Math.PI / 2 + .05; lat += .06) curve.push(pointAt(lat, lon));
       strokeCurve(curve, cx, cy, radius);
     }
+    drawSphereAssets(cx, cy, radius);
     state.points = sphereNodes.map((node) => {
       const point = pointAt(node.lat, node.lon);
       const perspective = 1 + point.z * .16;
