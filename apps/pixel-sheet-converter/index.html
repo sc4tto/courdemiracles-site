@@ -6,6 +6,11 @@
   <meta name="description" content="Converti immagini in griglie di celle usando palette e dithering direttamente nel browser.">
   <meta name="pixel-nft-api-base" content="">
   <title>Pixel Sheet Converter — Cour de Miracles</title>
+  <script>
+    if (location.hostname === "courdemiracles.net" || location.hostname === "www.courdemiracles.net") {
+      location.replace(`https://courdemiracles-pixel-sheet.vercel.app${location.pathname}${location.search}${location.hash}`);
+    }
+  </script>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
   <script src="nft.js" defer></script>
