@@ -170,6 +170,62 @@ const statusMessage = document.querySelector("#status-message");
 const terminalOutput = document.querySelector("#terminal-output");
 const terminalForm = document.querySelector("#terminal-form");
 const terminalInput = document.querySelector("#terminal-input");
+
+const layoutDefaults = { archive: 230, preview: 330, terminal: 190 };
+const layoutLimits = {
+  archive: value => Math.max(175, Math.min(420, value)),
+  preview: value => Math.max(280, Math.min(Math.max(280, window.innerWidth - 660), value)),
+  terminal: value => Math.max(120, Math.min(Math.max(120, window.innerHeight - 320), value)),
+};
+
+function setLayoutSize(name, value, persist = true) {
+  const size = Math.round(layoutLimits[name](value));
+  const target = name === "archive" ? document.querySelector(".desktop-body") : document.querySelector(".workspace-desk");
+  const property = name === "archive" ? "--archive-width" : name === "preview" ? "--preview-width" : "--terminal-height";
+  target.style.setProperty(property, `${size}px`);
+  if (persist) localStorage.setItem(`cdm-layout-${name}`, String(size));
+  window.dispatchEvent(new Event("resize"));
+}
+
+function setupSplitters() {
+  for (const name of Object.keys(layoutDefaults)) {
+    const saved = Number(localStorage.getItem(`cdm-layout-${name}`));
+    if (Number.isFinite(saved) && saved > 0) setLayoutSize(name, saved, false);
+  }
+  document.querySelectorAll("[data-resize]").forEach(splitter => {
+    const name = splitter.dataset.resize;
+    splitter.addEventListener("pointerdown", event => {
+      if (window.innerWidth <= 900) return;
+      event.preventDefault();
+      splitter.setPointerCapture(event.pointerId);
+      splitter.classList.add("is-dragging");
+      document.body.classList.add("is-resizing");
+      document.body.dataset.resizeAxis = name === "terminal" ? "y" : "x";
+    });
+    splitter.addEventListener("pointermove", event => {
+      if (!splitter.hasPointerCapture(event.pointerId)) return;
+      const value = name === "archive" ? event.clientX : name === "preview" ? window.innerWidth - event.clientX : window.innerHeight - 28 - event.clientY;
+      setLayoutSize(name, value);
+    });
+    const finish = event => {
+      if (splitter.hasPointerCapture(event.pointerId)) splitter.releasePointerCapture(event.pointerId);
+      splitter.classList.remove("is-dragging");
+      document.body.classList.remove("is-resizing");
+      delete document.body.dataset.resizeAxis;
+    };
+    splitter.addEventListener("pointerup", finish);
+    splitter.addEventListener("pointercancel", finish);
+    splitter.addEventListener("dblclick", () => setLayoutSize(name, layoutDefaults[name]));
+    splitter.addEventListener("keydown", event => {
+      const allowed = name === "terminal" ? ["ArrowUp", "ArrowDown"] : ["ArrowLeft", "ArrowRight"];
+      if (!allowed.includes(event.key)) return;
+      event.preventDefault();
+      const current = Number(localStorage.getItem(`cdm-layout-${name}`)) || layoutDefaults[name];
+      const direction = event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1;
+      setLayoutSize(name, current + direction * (event.shiftKey ? 40 : 10));
+    });
+  });
+}
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 let currentWorkspace = "desk";
@@ -793,6 +849,7 @@ function updateClock() {
 
 updateClock();
 setInterval(updateClock, 30000);
+setupSplitters();
 renderPreview("readme", { switchToDesk: false });
 terminalLine("Cour de Miracles shell 0.2", "info");
 terminalLine("digita help oppure premi Ctrl+K");

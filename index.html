@@ -74,6 +74,8 @@
         </div>
       </aside>
 
+      <div class="splitter splitter-archive" role="separator" aria-label="Ridimensiona archivio" aria-orientation="vertical" tabindex="0" data-resize="archive"></div>
+
       <section class="workspace workspace-desk is-active" id="workspace-desk" data-workspace-panel="desk" aria-label="Tavolo di lavoro">
         <section class="atelier-window tile">
           <div class="window-bar">
@@ -103,12 +105,14 @@
             </button>
           </div>
         </section>
+        <div class="splitter splitter-preview" role="separator" aria-label="Ridimensiona anteprima" aria-orientation="vertical" tabindex="0" data-resize="preview"></div>
         <aside class="preview-window tile" aria-label="Anteprima del contenuto" aria-live="polite">
           <div class="window-bar">
             <span class="window-name">anteprima</span><span class="window-path" id="preview-path">~/cour-de-miracles/README</span><span class="window-status" id="preview-index">00</span>
           </div>
           <div class="preview-content" id="preview-content"></div>
         </aside>
+        <div class="splitter splitter-terminal" role="separator" aria-label="Ridimensiona terminale" aria-orientation="horizontal" tabindex="0" data-resize="terminal"></div>
         <section class="terminal-window tile" aria-label="Terminale interattivo">
           <div class="window-bar terminal-bar">
             <span class="window-name">terminale</span><span class="window-path">atelier@courdemiracles:~</span><button class="terminal-clear" type="button" data-command="clear">pulisci</button>
