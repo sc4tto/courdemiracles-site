@@ -569,10 +569,12 @@ const sphereAssets = [
 ];
 
 const ecosystemMesh = (() => {
-  const rows = 14, columns = 28, vertices = [], faces = [];
+  const rows = 18, columns = 36, vertices = [], faces = [];
   const heightAt = (lat, lon) => {
-    const continents = Math.sin(lon * 2.1 + .7) * .52 + Math.cos(lat * 3.4 - lon * .8) * .31 + Math.sin((lat + lon) * 5.2) * .17;
-    return Math.max(-.035, continents * .055);
+    const broad = Math.sin(lon * 1.7 + .65) * .48 + Math.cos(lat * 2.8 - lon * .72) * .34;
+    const ridges = Math.sin((lat + lon) * 5.4) * .11 + Math.cos(lat * 8.2 + lon * 3.1) * .07;
+    const continents = broad + ridges;
+    return Math.max(-.045, continents * .085);
   };
   for (let row = 0; row <= rows; row++) {
     const lat = -Math.PI / 2 + Math.PI * row / rows;
@@ -593,11 +595,11 @@ const ecosystemMesh = (() => {
   return { vertices, faces };
 })();
 
-const ecosystemTrees = Array.from({ length: 34 }, (_, index) => {
+const ecosystemTrees = Array.from({ length: 72 }, (_, index) => {
   const lat = Math.asin(-.82 + (index * .61803398875 % 1) * 1.64);
   const lon = -Math.PI + (index * 2.3999632297 % (Math.PI * 2));
   const sample = Math.sin(lon * 2.1 + .7) * .52 + Math.cos(lat * 3.4 - lon * .8) * .31 + Math.sin((lat + lon) * 5.2) * .17;
-  return { lat, lon, visible: sample > .18, size: .035 + (index % 4) * .004 };
+  return { lat, lon, visible: sample > .03, size: .032 + (index % 5) * .004 };
 }).filter(tree => tree.visible);
 
 function showSphereNode(id) {
@@ -653,7 +655,7 @@ function createSphere(canvas, options = {}) {
 
   function drawEcosystem(cx, cy, radius) {
     const projected = ecosystemMesh.vertices.map(vertex => {
-      const altitude = vertex.water ? 1.006 : 1.018 + vertex.height;
+      const altitude = vertex.water ? 1.004 : 1.022 + vertex.height;
       const point = pointAtAltitude(vertex.lat, vertex.lon, altitude);
       return { ...vertex, point, x:cx + point.x * radius, y:cy - point.y * radius };
     });
@@ -681,14 +683,14 @@ function createSphere(canvas, options = {}) {
       ctx.stroke();
     });
     ecosystemTrees.map(tree => {
-      const base = pointAtAltitude(tree.lat, tree.lon, 1.045);
-      const tip = pointAtAltitude(tree.lat, tree.lon, 1.045 + tree.size);
-      return { ...tree, base, tip, z:base.z };
+      const base = pointAtAltitude(tree.lat, tree.lon, 1.04);
+      return { ...tree, base, z:base.z };
     }).filter(tree => tree.z > -.02).sort((a, b) => a.z - b.z).forEach(tree => {
       const bx = cx + tree.base.x * radius, by = cy - tree.base.y * radius;
-      const tx = cx + tree.tip.x * radius, ty = cy - tree.tip.y * radius;
       const scale = .75 + Math.max(0, tree.z) * .65;
-      const crown = radius * tree.size * .48 * scale;
+      const height = radius * tree.size * 1.65 * scale;
+      const crown = height * .42;
+      const tx = bx, ty = by - height;
       ctx.strokeStyle = "rgba(126,91,59,.85)";
       ctx.lineWidth = Math.max(1, radius * .006 * scale);
       ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(tx, ty); ctx.stroke();
@@ -935,5 +937,5 @@ renderPreview("readme", { switchToDesk: false });
 terminalLine("Cour de Miracles shell 0.2", "info");
 terminalLine("digita help oppure premi Ctrl+K");
 showSphereNode("architecture");
-switchWorkspace("desk", { announce: false });
+switchWorkspace("sphere", { announce: false });
 announce("sistema pronto · scegli un oggetto o un comando");

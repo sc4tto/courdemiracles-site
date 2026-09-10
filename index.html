@@ -9,15 +9,15 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="desktop" id="desktop" data-workspace="desk">
+  <div class="desktop" id="desktop" data-workspace="sphere">
     <header class="system-bar">
       <button class="brand" type="button" data-switch="desk" aria-label="Apri il tavolo di lavoro">
         <span class="brand-mark" aria-hidden="true">CdM</span>
         <span>cour de miracles</span>
       </button>
       <nav class="workspace-switcher" aria-label="Spazi di lavoro" role="tablist">
-        <button class="workspace-tab is-active" type="button" role="tab" aria-controls="workspace-desk" aria-selected="true" data-switch="desk"><span>01</span> Tavolo</button>
-        <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-sphere" aria-selected="false" data-switch="sphere"><span>02</span> Sfera</button>
+        <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-desk" aria-selected="false" data-switch="desk"><span>01</span> Tavolo</button>
+        <button class="workspace-tab is-active" type="button" role="tab" aria-controls="workspace-sphere" aria-selected="true" data-switch="sphere"><span>02</span> Sfera</button>
         <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-portfolio" aria-selected="false" data-switch="portfolio"><span>03</span> Portfolio</button>
         <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-media" aria-selected="false" data-switch="media"><span>04</span> Media</button>
       </nav>
@@ -75,7 +75,7 @@
         <span class="tile-resizer tile-resizer-right" role="separator" aria-label="Ridimensiona archivio e area di lavoro" aria-orientation="vertical" tabindex="0" data-tile-resize="archive"></span>
       </aside>
 
-      <section class="workspace workspace-desk is-active" id="workspace-desk" data-workspace-panel="desk" aria-label="Tavolo di lavoro">
+      <section class="workspace workspace-desk" id="workspace-desk" data-workspace-panel="desk" aria-label="Tavolo di lavoro" hidden>
         <section class="atelier-window tile">
           <div class="window-bar">
             <span class="window-name">tavolo</span>
@@ -126,7 +126,7 @@
         </section>
       </section>
 
-      <section class="workspace workspace-sphere" id="workspace-sphere" data-workspace-panel="sphere" aria-label="Mappa sferica" hidden>
+      <section class="workspace workspace-sphere is-active" id="workspace-sphere" data-workspace-panel="sphere" aria-label="Mappa sferica">
         <section class="sphere-window tile">
           <div class="window-bar">
             <span class="window-name">sfera</span><span class="window-path">~/cour-de-miracles/map --interactive</span><span class="window-status">drag / zoom</span>
