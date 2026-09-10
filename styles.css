@@ -326,6 +326,11 @@ body.is-tile-resizing[data-axis="y"] { cursor:row-resize; }
 .sphere-portal canvas { width: 100%; height: 100%; display: block; }
 .sphere-portal > span { position: absolute; left: 50%; bottom: 8px; min-width: max-content; transform: translateX(-50%); padding: 7px 11px; border: 1px solid rgba(158,208,174,.45); background: rgba(18,25,21,.88); color: var(--paper); font-family: var(--mono); font-size: .75rem; text-align: center; }
 .sphere-portal small { display: block; color: var(--green); font-size: .75rem; text-transform: uppercase; }
+.sphere-portal b { font-weight:500; }
+.showcase-control { position:absolute; z-index:9; top:50%; width:34px; height:48px; padding:0; border:1px solid rgba(158,208,174,.42); background:rgba(18,25,21,.9); color:var(--green-bright); font:24px/1 var(--mono); cursor:pointer; transform:translateY(-50%); }
+.showcase-control:hover,.showcase-control:focus-visible { background:#303c34; border-color:var(--green); }
+.showcase-previous { left:calc(50% - 157px); }
+.showcase-next { right:calc(50% - 157px); }
 
 .media-object {
   left: 8%; bottom: 7%; width: clamp(180px, 21%, 235px); min-height: 122px; padding: 68px 18px 16px;
@@ -545,6 +550,9 @@ body.is-tile-resizing[data-axis="y"] { cursor:row-resize; }
   .table-object, .sphere-portal { position: relative; inset: auto; width: auto; min-width: 0; min-height: 145px; transform: none; }
   .table-object:hover, .sphere-portal:hover { transform: translateY(-4px); }
   .sphere-portal { grid-column: 1 / -1; grid-row: 1; width: min(260px, 82vw); height: 240px; justify-self: center; }
+  .showcase-control { position:relative; top:auto; align-self:center; transform:none; }
+  .showcase-previous { grid-column:1; grid-row:1; justify-self:start; left:auto; }
+  .showcase-next { grid-column:2; grid-row:1; justify-self:end; right:auto; }
   .blueprint-object { grid-column: 1 / -1; min-height: 200px; }
   .folder-object { padding-top: 28px; }
   .folder-tab { top: 0; width: 100%; }

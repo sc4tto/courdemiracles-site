@@ -566,7 +566,8 @@ document.querySelectorAll("[data-node]").forEach((button) => button.addEventList
 function createSphere(canvas, options = {}) {
   const ctx = canvas.getContext("2d");
   const interactive = Boolean(options.interactive);
-  const state = { rx: interactive ? -.12 : -.2, ry: interactive ? -.45 : .2, vx: 0, vy: 0, zoom: 1, dragging: false, moved: false, lastX: 0, lastY: 0, width: 0, height: 0, points: [], selected: null };
+  const showcase = Boolean(options.showcase);
+  const state = { rx: interactive ? -.12 : -.2, ry: interactive ? -.45 : .2, vx: 0, vy: 0, zoom: 1, dragging: false, moved: false, lastX: 0, lastY: 0, width: 0, height: 0, points: [], selected: null, showcaseIndex:0 };
   let active = false;
   let frameId = 0;
 
@@ -667,6 +668,40 @@ function createSphere(canvas, options = {}) {
     });
   }
 
+  function drawShowcaseObject(cx, cy, radius) {
+    const index = state.showcaseIndex;
+    ctx.lineWidth = 1.15;
+    ctx.strokeStyle = "rgba(158,208,174,.68)";
+    ctx.fillStyle = "rgba(62,96,77,.14)";
+    if (index === 1) {
+      const vertices = [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]].map(([x,y,z]) => rotatePoint(x*.58,y*.58,z*.58));
+      const edges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+      edges.sort((a,b)=>(vertices[a[0]].z+vertices[a[1]].z)-(vertices[b[0]].z+vertices[b[1]].z)).forEach(([a,b])=>{ctx.beginPath();ctx.moveTo(cx+vertices[a].x*radius,cy-vertices[a].y*radius);ctx.lineTo(cx+vertices[b].x*radius,cy-vertices[b].y*radius);ctx.stroke();});
+    } else if (index === 2) {
+      for (let ring=0;ring<12;ring++) {
+        ctx.beginPath();
+        for (let step=0;step<=64;step++) {
+          const u=step/64*Math.PI*2,v=ring/12*Math.PI*2;
+          const x=(.68+.24*Math.cos(v))*Math.cos(u),y=.24*Math.sin(v),z=(.68+.24*Math.cos(v))*Math.sin(u);
+          const p=rotatePoint(x,y,z),px=cx+p.x*radius,py=cy-p.y*radius;
+          if(step===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+        }
+        ctx.stroke();
+      }
+    } else if (index === 3) {
+      const rings=[];
+      for(let row=0;row<=10;row++){
+        const lat=-Math.PI/2+row/10*Math.PI, ring=[];
+        for(let column=0;column<20;column++){
+          const lon=column/20*Math.PI*2, pulse=1+.14*Math.sin(lon*3+lat*4)+.08*Math.cos(lon*5-lat*2);
+          const cl=Math.cos(lat),p=rotatePoint(cl*Math.sin(lon)*pulse,Math.sin(lat)*pulse,cl*Math.cos(lon)*pulse);ring.push(p);
+        }rings.push(ring);
+      }
+      rings.forEach(ring=>{ctx.beginPath();ring.forEach((p,i)=>{const x=cx+p.x*radius*.72,y=cy-p.y*radius*.72;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.stroke();});
+      for(let column=0;column<20;column++){ctx.beginPath();rings.forEach((ring,row)=>{const p=ring[column],x=cx+p.x*radius*.72,y=cy-p.y*radius*.72;row?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.stroke();}
+    }
+  }
+
   function draw() {
     const { width, height } = state;
     if (!width || !height) return;
@@ -674,6 +709,11 @@ function createSphere(canvas, options = {}) {
     const cx = width / 2;
     const cy = height / 2;
     const radius = Math.min(width, height) * (interactive ? .33 : .37) * state.zoom;
+    if (showcase && state.showcaseIndex > 0) {
+      const glow=ctx.createRadialGradient(cx,cy,radius*.1,cx,cy,radius*1.2);glow.addColorStop(0,"rgba(158,208,174,.18)");glow.addColorStop(1,"rgba(12,18,14,0)");ctx.fillStyle=glow;ctx.beginPath();ctx.arc(cx,cy,radius*1.2,0,Math.PI*2);ctx.fill();
+      drawShowcaseObject(cx,cy,radius);
+      return;
+    }
     const glow = ctx.createRadialGradient(cx - radius * .28, cy - radius * .34, radius * .05, cx, cy, radius * 1.3);
     glow.addColorStop(0, "rgba(158,208,174,.3)");
     glow.addColorStop(.5, "rgba(80,122,104,.14)");
@@ -743,6 +783,7 @@ function createSphere(canvas, options = {}) {
   function start() { active = true; resize(); schedule(); }
   function stop() { active = false; if (frameId) cancelAnimationFrame(frameId); frameId = 0; }
   function select(id) { state.selected = id; draw(); }
+  function setShowcase(index) { state.showcaseIndex=(index+4)%4; draw(); }
 
   if (interactive) {
     canvas.addEventListener("pointerdown", (event) => {
@@ -793,11 +834,17 @@ function createSphere(canvas, options = {}) {
       draw();
     });
   }
-  return { resize, start, stop, select };
+  return { resize, start, stop, select, setShowcase };
 }
 
-const deskSphere = createSphere(document.querySelector("#desk-sphere"));
+const deskSphere = createSphere(document.querySelector("#desk-sphere"), { showcase:true });
 const spaceSphere = createSphere(document.querySelector("#space-canvas"), { interactive: true });
+const showcaseItems=["Sfera relazionale","Cubo reticolare","Toro parametrico","Forma organica"];
+let showcaseIndex=0;
+function changeShowcase(direction){showcaseIndex=(showcaseIndex+direction+showcaseItems.length)%showcaseItems.length;deskSphere.setShowcase(showcaseIndex);document.querySelector("#showcase-counter").textContent=`${String(showcaseIndex+1).padStart(2,"0")} / ${String(showcaseItems.length).padStart(2,"0")}`;document.querySelector("#showcase-title").textContent=showcaseItems[showcaseIndex];}
+document.querySelector("#showcase-previous").addEventListener("click",()=>changeShowcase(-1));
+document.querySelector("#showcase-next").addEventListener("click",()=>changeShowcase(1));
+setInterval(()=>{if(currentWorkspace==="desk"&&!document.hidden)changeShowcase(1);},8000);
 
 window.addEventListener("resize", () => {
   if (currentWorkspace === "desk") deskSphere.resize();
