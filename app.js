@@ -546,61 +546,7 @@ const sphereNodes = [
   { id: "documents", title: "Documenti", lat: -.82, lon: -.7, color: "#6fa9bc" },
 ];
 
-const sphereAssets = [
-  {
-    id: "voxel-tree",
-    lat: .28,
-    lon: .82,
-    voxels: [
-      { x: 0, y: 0, z: .05, color: "#725038" },
-      { x: 0, y: 0, z: 1.05, color: "#835b3c" },
-      { x: 0, y: 0, z: 2.05, color: "#916742" },
-      { x: -1, y: 0, z: 3.05, color: "#477553" },
-      { x: 0, y: 0, z: 3.05, color: "#5b9464" },
-      { x: 1, y: 0, z: 3.05, color: "#477553" },
-      { x: 0, y: -1, z: 3.05, color: "#3f684a" },
-      { x: 0, y: 1, z: 3.05, color: "#69a672" },
-      { x: -1, y: 0, z: 4.05, color: "#54895e" },
-      { x: 0, y: 0, z: 4.05, color: "#72ad78" },
-      { x: 1, y: 0, z: 4.05, color: "#54895e" },
-      { x: 0, y: 0, z: 5.05, color: "#65a16e" },
-    ],
-  },
-];
-
-const ecosystemMesh = (() => {
-  const rows = 18, columns = 36, vertices = [], faces = [];
-  const heightAt = (lat, lon) => {
-    const broad = Math.sin(lon * 1.7 + .65) * .48 + Math.cos(lat * 2.8 - lon * .72) * .34;
-    const ridges = Math.sin((lat + lon) * 5.4) * .11 + Math.cos(lat * 8.2 + lon * 3.1) * .07;
-    const continents = broad + ridges;
-    return Math.max(-.045, continents * .085);
-  };
-  for (let row = 0; row <= rows; row++) {
-    const lat = -Math.PI / 2 + Math.PI * row / rows;
-    for (let column = 0; column < columns; column++) {
-      const lon = -Math.PI + Math.PI * 2 * column / columns;
-      const height = heightAt(lat, lon);
-      vertices.push({ lat, lon, height, water: height < .006 });
-    }
-  }
-  for (let row = 0; row < rows; row++) {
-    for (let column = 0; column < columns; column++) {
-      const next = (column + 1) % columns;
-      const a = row * columns + column, b = row * columns + next;
-      const c = (row + 1) * columns + column, d = (row + 1) * columns + next;
-      faces.push([a, c, d], [a, d, b]);
-    }
-  }
-  return { vertices, faces };
-})();
-
-const ecosystemTrees = Array.from({ length: 72 }, (_, index) => {
-  const lat = Math.asin(-.82 + (index * .61803398875 % 1) * 1.64);
-  const lon = -Math.PI + (index * 2.3999632297 % (Math.PI * 2));
-  const sample = Math.sin(lon * 2.1 + .7) * .52 + Math.cos(lat * 3.4 - lon * .8) * .31 + Math.sin((lat + lon) * 5.2) * .17;
-  return { lat, lon, visible: sample > .03, size: .032 + (index % 5) * .004 };
-}).filter(tree => tree.visible);
+const sphereAssets = [];
 
 function showSphereNode(id) {
   const item = contentItems[id] || contentItems.readme;
@@ -646,62 +592,6 @@ function createSphere(canvas, options = {}) {
   function pointAt(lat, lon) {
     const cl = Math.cos(lat);
     return rotatePoint(cl * Math.sin(lon), Math.sin(lat), cl * Math.cos(lon));
-  }
-
-  function pointAtAltitude(lat, lon, altitude = 1) {
-    const cl = Math.cos(lat);
-    return rotatePoint(cl * Math.sin(lon) * altitude, Math.sin(lat) * altitude, cl * Math.cos(lon) * altitude);
-  }
-
-  function drawEcosystem(cx, cy, radius) {
-    const projected = ecosystemMesh.vertices.map(vertex => {
-      const altitude = vertex.water ? 1.004 : 1.022 + vertex.height;
-      const point = pointAtAltitude(vertex.lat, vertex.lon, altitude);
-      return { ...vertex, point, x:cx + point.x * radius, y:cy - point.y * radius };
-    });
-    const faces = ecosystemMesh.faces.map(indices => {
-      const points = indices.map(index => projected[index]);
-      return { points, z:points.reduce((sum, item) => sum + item.point.z, 0) / 3 };
-    }).filter(face => face.z > -.16).sort((a, b) => a.z - b.z);
-    faces.forEach(face => {
-      const averageHeight = face.points.reduce((sum, item) => sum + item.height, 0) / 3;
-      const water = face.points.filter(item => item.water).length >= 2;
-      const light = Math.max(0, face.z) * 18;
-      ctx.beginPath();
-      ctx.moveTo(face.points[0].x, face.points[0].y);
-      ctx.lineTo(face.points[1].x, face.points[1].y);
-      ctx.lineTo(face.points[2].x, face.points[2].y);
-      ctx.closePath();
-      ctx.fillStyle = water
-        ? `hsl(188 34% ${18 + light}%)`
-        : averageHeight > .032
-          ? `hsl(35 18% ${25 + light * .45}%)`
-          : `hsl(139 22% ${22 + light * .55}%)`;
-      ctx.fill();
-      ctx.strokeStyle = water ? "rgba(111,169,188,.18)" : "rgba(158,208,174,.13)";
-      ctx.lineWidth = .65;
-      ctx.stroke();
-    });
-    ecosystemTrees.map(tree => {
-      const base = pointAtAltitude(tree.lat, tree.lon, 1.04);
-      return { ...tree, base, z:base.z };
-    }).filter(tree => tree.z > -.02).sort((a, b) => a.z - b.z).forEach(tree => {
-      const bx = cx + tree.base.x * radius, by = cy - tree.base.y * radius;
-      const scale = .75 + Math.max(0, tree.z) * .65;
-      const height = radius * tree.size * 1.65 * scale;
-      const crown = height * .42;
-      const tx = bx, ty = by - height;
-      ctx.strokeStyle = "rgba(126,91,59,.85)";
-      ctx.lineWidth = Math.max(1, radius * .006 * scale);
-      ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(tx, ty); ctx.stroke();
-      ctx.fillStyle = tree.z > .45 ? "#78a56f" : "#52765a";
-      ctx.beginPath();
-      ctx.moveTo(tx, ty - crown * .85);
-      ctx.lineTo(tx + crown * .72, ty + crown * .55);
-      ctx.lineTo(tx - crown * .72, ty + crown * .55);
-      ctx.closePath(); ctx.fill();
-      ctx.strokeStyle = "rgba(12,25,17,.55)"; ctx.lineWidth = .7; ctx.stroke();
-    });
   }
 
   function strokeCurve(points, cx, cy, radius) {
@@ -805,8 +695,7 @@ function createSphere(canvas, options = {}) {
       for (let lat = -Math.PI / 2; lat <= Math.PI / 2 + .05; lat += .06) curve.push(pointAt(lat, lon));
       strokeCurve(curve, cx, cy, radius);
     }
-    if (interactive) drawEcosystem(cx, cy, radius);
-    else drawSphereAssets(cx, cy, radius);
+    drawSphereAssets(cx, cy, radius);
     state.points = sphereNodes.map((node) => {
       const point = pointAt(node.lat, node.lon);
       const perspective = 1 + point.z * .16;
@@ -937,5 +826,5 @@ renderPreview("readme", { switchToDesk: false });
 terminalLine("Cour de Miracles shell 0.2", "info");
 terminalLine("digita help oppure premi Ctrl+K");
 showSphereNode("architecture");
-switchWorkspace("sphere", { announce: false });
+switchWorkspace("desk", { announce: false });
 announce("sistema pronto · scegli un oggetto o un comando");
