@@ -670,35 +670,27 @@ function createSphere(canvas, options = {}) {
 
   function drawShowcaseObject(cx, cy, radius) {
     const index = state.showcaseIndex;
-    ctx.lineWidth = 1.15;
-    ctx.strokeStyle = "rgba(158,208,174,.68)";
-    ctx.fillStyle = "rgba(62,96,77,.14)";
+    ctx.lineWidth = 1.7;
+    ctx.strokeStyle = "rgba(190,229,202,.86)";
     if (index === 1) {
       const vertices = [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]].map(([x,y,z]) => rotatePoint(x*.58,y*.58,z*.58));
+      const faces=[[0,1,2,3],[4,5,6,7],[0,1,5,4],[2,3,7,6],[1,2,6,5],[0,3,7,4]].map(indices=>({indices,z:indices.reduce((sum,i)=>sum+vertices[i].z,0)/4})).sort((a,b)=>a.z-b.z);
+      faces.forEach((face,i)=>{ctx.beginPath();face.indices.forEach((vertex,j)=>{const p=vertices[vertex],x=cx+p.x*radius,y=cy-p.y*radius;j?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.fillStyle=i%2?"rgba(77,124,102,.19)":"rgba(111,169,188,.16)";ctx.fill();});
       const edges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
       edges.sort((a,b)=>(vertices[a[0]].z+vertices[a[1]].z)-(vertices[b[0]].z+vertices[b[1]].z)).forEach(([a,b])=>{ctx.beginPath();ctx.moveTo(cx+vertices[a].x*radius,cy-vertices[a].y*radius);ctx.lineTo(cx+vertices[b].x*radius,cy-vertices[b].y*radius);ctx.stroke();});
     } else if (index === 2) {
-      for (let ring=0;ring<12;ring++) {
+      ctx.lineWidth=1.45;
+      for (let ring=0;ring<10;ring++) {
+        ctx.strokeStyle=ring%2?"rgba(158,208,174,.82)":"rgba(111,169,188,.72)";
         ctx.beginPath();
-        for (let step=0;step<=64;step++) {
-          const u=step/64*Math.PI*2,v=ring/12*Math.PI*2;
+        for (let step=0;step<=72;step++) {
+          const u=step/72*Math.PI*2,v=ring/10*Math.PI*2;
           const x=(.68+.24*Math.cos(v))*Math.cos(u),y=.24*Math.sin(v),z=(.68+.24*Math.cos(v))*Math.sin(u);
           const p=rotatePoint(x,y,z),px=cx+p.x*radius,py=cy-p.y*radius;
           if(step===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
         }
         ctx.stroke();
       }
-    } else if (index === 3) {
-      const rings=[];
-      for(let row=0;row<=10;row++){
-        const lat=-Math.PI/2+row/10*Math.PI, ring=[];
-        for(let column=0;column<20;column++){
-          const lon=column/20*Math.PI*2, pulse=1+.14*Math.sin(lon*3+lat*4)+.08*Math.cos(lon*5-lat*2);
-          const cl=Math.cos(lat),p=rotatePoint(cl*Math.sin(lon)*pulse,Math.sin(lat)*pulse,cl*Math.cos(lon)*pulse);ring.push(p);
-        }rings.push(ring);
-      }
-      rings.forEach(ring=>{ctx.beginPath();ring.forEach((p,i)=>{const x=cx+p.x*radius*.72,y=cy-p.y*radius*.72;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.stroke();});
-      for(let column=0;column<20;column++){ctx.beginPath();rings.forEach((ring,row)=>{const p=ring[column],x=cx+p.x*radius*.72,y=cy-p.y*radius*.72;row?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.stroke();}
     }
   }
 
@@ -783,7 +775,7 @@ function createSphere(canvas, options = {}) {
   function start() { active = true; resize(); schedule(); }
   function stop() { active = false; if (frameId) cancelAnimationFrame(frameId); frameId = 0; }
   function select(id) { state.selected = id; draw(); }
-  function setShowcase(index) { state.showcaseIndex=(index+4)%4; draw(); }
+  function setShowcase(index) { state.showcaseIndex=(index+3)%3; draw(); }
 
   if (interactive) {
     canvas.addEventListener("pointerdown", (event) => {
@@ -839,7 +831,7 @@ function createSphere(canvas, options = {}) {
 
 const deskSphere = createSphere(document.querySelector("#desk-sphere"), { showcase:true });
 const spaceSphere = createSphere(document.querySelector("#space-canvas"), { interactive: true });
-const showcaseItems=["Sfera relazionale","Cubo reticolare","Toro parametrico","Forma organica"];
+const showcaseItems=["Sfera relazionale","Cubo reticolare","Toro parametrico"];
 let showcaseIndex=0;
 function changeShowcase(direction){showcaseIndex=(showcaseIndex+direction+showcaseItems.length)%showcaseItems.length;deskSphere.setShowcase(showcaseIndex);document.querySelector("#showcase-counter").textContent=`${String(showcaseIndex+1).padStart(2,"0")} / ${String(showcaseItems.length).padStart(2,"0")}`;document.querySelector("#showcase-title").textContent=showcaseItems[showcaseIndex];}
 document.querySelector("#showcase-previous").addEventListener("click",()=>changeShowcase(-1));
