@@ -413,6 +413,7 @@ body.is-tile-resizing[data-axis="y"] { cursor:row-resize; }
 .collection-heading h1, .media-heading h1 { max-width: 780px; margin: 0; font-family: var(--serif); font-size: clamp(3rem, 7vw, 7.2rem); font-weight: 500; line-height: .86; letter-spacing: -.055em; }
 .collection-heading p, .media-heading p { max-width: 620px; margin: 24px 0 0; color: #555b56; line-height: 1.55; }
 .collection-grid { flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); min-height: 230px; margin: 0 clamp(25px, 5vw, 72px) clamp(26px, 5vw, 60px); border: 1px solid #9f9b91; }
+.workspace-art .collection-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .collection-card { min-width: 0; padding: 18px; border: 0; border-right: 1px solid rgba(23,26,24,.45); text-align: left; cursor: pointer; transition: transform .18s ease, filter .18s ease; }
 .collection-card:last-child { border-right: 0; }
 .collection-card:hover, .collection-card:focus-visible { transform: translateY(-7px); filter: brightness(1.05); box-shadow: 0 12px 28px rgba(0,0,0,.2); }
@@ -496,6 +497,7 @@ body.is-tile-resizing[data-axis="y"] { cursor:row-resize; }
   .note-object { right: 5%; width: 190px; }
   .sphere-portal { width: 220px; }
   .collection-grid { grid-template-columns: 1fr 1fr; }
+  .workspace-art .collection-grid { grid-template-columns: 1fr 1fr; }
   .collection-card:nth-child(2) { border-right: 0; }
   .collection-card:nth-child(-n+2) { border-bottom: 1px solid rgba(23,26,24,.45); }
   .collection-card strong { margin-top: 28px; }

@@ -18,8 +18,9 @@
       <nav class="workspace-switcher" aria-label="Spazi di lavoro" role="tablist">
         <button class="workspace-tab is-active" type="button" role="tab" aria-controls="workspace-desk" aria-selected="true" data-switch="desk"><span>01</span> Tavolo</button>
         <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-sphere" aria-selected="false" data-switch="sphere"><span>02</span> Sfera</button>
-        <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-portfolio" aria-selected="false" data-switch="portfolio"><span>03</span> Portfolio</button>
+        <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-portfolio" aria-selected="false" data-switch="portfolio"><span>03</span> Architettura</button>
         <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-media" aria-selected="false" data-switch="media"><span>04</span> Media</button>
+        <button class="workspace-tab" type="button" role="tab" aria-controls="workspace-art" aria-selected="false" data-switch="art"><span>05</span> Arte</button>
       </nav>
       <div class="system-tools">
         <span class="system-state"><i aria-hidden="true"></i> locale</span>
@@ -37,13 +38,22 @@
         </div>
         <div class="tree" role="tree" aria-label="Cartelle del sito">
           <button class="tree-row folder-row is-expanded" type="button" role="treeitem" aria-expanded="true" aria-controls="folder-architecture" data-folder="architecture">
-            <span class="tree-twist">⌄</span><span class="folder-glyph" aria-hidden="true"></span><span>architettura</span><small>06</small>
+            <span class="tree-twist">⌄</span><span class="folder-glyph" aria-hidden="true"></span><span>architettura</span><small>04</small>
           </button>
           <div class="tree-group" id="folder-architecture" role="group">
-            <button class="tree-row child-row" type="button" role="treeitem" data-open="architecture"><span class="file-glyph" aria-hidden="true"></span><span>indice.portfolio</span></button>
-            <button class="tree-row child-row" type="button" role="treeitem" data-open="drawings"><span class="file-glyph" aria-hidden="true"></span><span>disegni + modelli</span></button>
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="architecture"><span class="file-glyph" aria-hidden="true"></span><span>indice.progetti</span></button>
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="projectOne"><span class="file-glyph" aria-hidden="true"></span><span>progetto-01</span></button>
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="projectTwo"><span class="file-glyph" aria-hidden="true"></span><span>progetto-02</span></button>
             <button class="tree-row child-row" type="button" role="treeitem" data-open="irisToroid"><span class="run-glyph" aria-hidden="true">▶</span><span>iris-toroid.ggb</span></button>
             <button class="tree-row child-row" type="button" role="treeitem" data-open="geogebraProfile"><span class="file-glyph" aria-hidden="true"></span><span>geogebra.index</span></button>
+          </div>
+          <button class="tree-row folder-row" type="button" role="treeitem" aria-expanded="false" aria-controls="folder-art" data-folder="art">
+            <span class="tree-twist">›</span><span class="folder-glyph" aria-hidden="true"></span><span>arte</span><small>03</small>
+          </button>
+          <div class="tree-group" id="folder-art" role="group" hidden>
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="painting"><span class="file-glyph" aria-hidden="true"></span><span>pittura.collection</span></button>
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="graphics"><span class="file-glyph" aria-hidden="true"></span><span>grafica.collection</span></button>
+            <button class="tree-row child-row" type="button" role="treeitem" data-open="sculpture"><span class="file-glyph" aria-hidden="true"></span><span>scultura.collection</span></button>
           </div>
           <button class="tree-row folder-row is-expanded" type="button" role="treeitem" aria-expanded="true" aria-controls="folder-laboratory" data-folder="laboratory">
             <span class="tree-twist">⌄</span><span class="folder-glyph" aria-hidden="true"></span><span>laboratorio</span><small>04</small>
@@ -69,7 +79,7 @@
           </div>
         </div>
         <div class="browser-footer">
-          <span>8 elementi</span>
+          <span>11 elementi</span>
           <button type="button" data-command="help">guida</button>
         </div>
         <span class="tile-resizer tile-resizer-right" role="separator" aria-label="Ridimensiona archivio e area di lavoro" aria-orientation="vertical" tabindex="0" data-tile-resize="archive"></span>
@@ -147,27 +157,41 @@
           <div class="node-list" aria-label="Elenco alternativo dei nodi">
             <button type="button" data-node="architecture">architettura</button><button type="button" data-node="atlas">atlante</button>
             <button type="button" data-node="quiz">quiz</button><button type="button" data-node="pixel">pixel</button>
-            <button type="button" data-node="media">media</button><button type="button" data-node="profile">profilo</button>
+            <button type="button" data-node="media">media</button><button type="button" data-node="art">arte</button><button type="button" data-node="profile">profilo</button>
           </div>
         </aside>
       </section>
 
-      <section class="workspace workspace-collection" id="workspace-portfolio" data-workspace-panel="portfolio" aria-label="Portfolio di architettura" hidden>
+      <section class="workspace workspace-collection" id="workspace-portfolio" data-workspace-panel="portfolio" aria-label="Progetti di architettura" hidden>
         <section class="collection-window tile">
-          <div class="window-bar"><span class="window-name">portfolio</span><span class="window-path">~/architettura/indice</span><span class="window-status">03</span></div>
-          <header class="collection-heading"><span class="section-code">ARCH / INDEX</span><h1>Portfolio di architettura</h1><p>La struttura è pronta ad accogliere progetti, immagini, tavole e testi. Ogni voce aprirà una scheda autonoma.</p></header>
+          <div class="window-bar"><span class="window-name">architettura</span><span class="window-path">~/architettura/progetti</span><span class="window-status">03</span></div>
+          <header class="collection-heading"><span class="section-code">ARCH / PROGETTI</span><h1>Archivio per progetto</h1><p>Ogni progetto riunisce presentazione, disegni, tavole PDF, modelli, processo e documenti in una scheda autonoma.</p></header>
           <div class="collection-grid">
-            <button class="collection-card card-blue" type="button" data-open="architecture"><span>01</span><strong>Progetti</strong><small>indice e schede</small></button>
-            <button class="collection-card card-paper" type="button" data-open="drawings"><span>02</span><strong>Disegni</strong><small>piante · sezioni · dettagli</small></button>
-            <button class="collection-card card-amber" type="button" data-open="models"><span>03</span><strong>Modelli</strong><small>fisici e digitali</small></button>
-            <button class="collection-card card-dark" type="button" data-open="documents"><span>04</span><strong>Tavole PDF</strong><small>documenti consultabili</small></button>
-            <button class="collection-card card-paper" type="button" data-open="irisToroid"><span>05</span><strong>Iris Toroid</strong><small>geometria parametrica · GeoGebra</small></button>
-            <button class="collection-card card-blue" type="button" data-open="geogebraProfile"><span>06</span><strong>Archivio GeoGebra</strong><small>profilo · costruzioni parametriche</small></button>
+            <button class="collection-card card-blue" type="button" data-open="projectOne"><span>01</span><strong>Progetto 01</strong><small>scheda completa dimostrativa</small></button>
+            <button class="collection-card card-paper" type="button" data-open="projectTwo"><span>02</span><strong>Progetto 02</strong><small>spazio predisposto</small></button>
+            <button class="collection-card card-amber" type="button" data-open="irisToroid"><span>03</span><strong>Iris Toroid</strong><small>geometria parametrica · GeoGebra</small></button>
+            <button class="collection-card card-dark" type="button" data-open="geogebraProfile"><span>04</span><strong>Archivio GeoGebra</strong><small>profilo · costruzioni parametriche</small></button>
           </div>
         </section>
         <aside class="collection-inspector tile">
-          <div class="window-bar"><span class="window-name">struttura</span><span class="window-path">portfolio.schema</span><span class="window-status">ready</span></div>
-          <div class="inspector-content portfolio-guide"><span class="section-code">SCHEDA TIPO</span><h2>Un progetto, una pagina</h2><ol><li><span>01</span>immagine di apertura</li><li><span>02</span>dati e ruolo</li><li><span>03</span>testo critico</li><li><span>04</span>disegni e processo</li></ol></div>
+          <div class="window-bar"><span class="window-name">struttura</span><span class="window-path">progetto.schema</span><span class="window-status">ready</span></div>
+          <div class="inspector-content portfolio-guide"><span class="section-code">SCHEDA TIPO</span><h2>Un progetto, sei sezioni</h2><ol><li><span>01</span>presentazione</li><li><span>02</span>disegni</li><li><span>03</span>tavole PDF</li><li><span>04</span>modelli · processo · documenti</li></ol></div>
+        </aside>
+      </section>
+
+      <section class="workspace workspace-collection workspace-art" id="workspace-art" data-workspace-panel="art" aria-label="Archivio arte" hidden>
+        <section class="collection-window tile">
+          <div class="window-bar"><span class="window-name">arte</span><span class="window-path">~/arte/collezioni</span><span class="window-status">05</span></div>
+          <header class="collection-heading"><span class="section-code">ARTE / INDEX</span><h1>Pratiche artistiche</h1><p>Un archivio distinto dall’architettura per opere, serie, studi e modelli tridimensionali.</p></header>
+          <div class="collection-grid">
+            <button class="collection-card card-blue" type="button" data-open="painting"><span>01</span><strong>Pittura</strong><small>digitale · VR · serie</small></button>
+            <button class="collection-card card-paper" type="button" data-open="graphics"><span>02</span><strong>Grafica</strong><small>stampe · segni · edizioni</small></button>
+            <button class="collection-card card-amber" type="button" data-open="sculpture"><span>03</span><strong>Scultura</strong><small>oggetti · mesh · ambienti 3D</small></button>
+          </div>
+        </section>
+        <aside class="collection-inspector tile">
+          <div class="window-bar"><span class="window-name">struttura</span><span class="window-path">arte.schema</span><span class="window-status">ready</span></div>
+          <div class="inspector-content portfolio-guide"><span class="section-code">ARCHIVIO OPERE</span><h2>Una scheda per opera o serie</h2><ol><li><span>01</span>immagine o modello</li><li><span>02</span>tecnica e dimensioni</li><li><span>03</span>testo e processo</li><li><span>04</span>documenti collegati</li></ol></div>
         </aside>
       </section>
 
@@ -198,6 +222,6 @@
     <div class="command-list" id="command-list" role="listbox" aria-label="Comandi disponibili"></div>
     <p class="palette-help">↑ ↓ seleziona · Invio esegue · Esc chiude</p>
   </dialog>
-  <script src="app.js?v=showcase-02"></script>
+  <script src="app.js?v=structure-01"></script>
 </body>
 </html>

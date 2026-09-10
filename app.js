@@ -13,19 +13,67 @@ const contentItems = {
     title: "Unix Atelier",
     description: "Un ambiente personale per attraversare architettura, strumenti e media. Puoi usare il tavolo, l’archivio laterale, la mappa sferica oppure il terminale.",
     path: "~/cour-de-miracles/README",
-    meta: [["stato", "interattivo"], ["navigazione", "4 workspace"], ["comandi", "Ctrl + K"], ["interfaccia", "tiling"]],
+    meta: [["stato", "interattivo"], ["navigazione", "5 workspace"], ["comandi", "Ctrl + K"], ["interfaccia", "tiling"]],
     workspace: "sphere",
     workspaceLabel: "Esplora la sfera",
   },
   architecture: {
     index: "01",
-    code: "ARCH / PORTFOLIO",
+    code: "ARCH / PROGETTI",
     title: "Architettura",
-    description: "Indice destinato ai progetti di architettura. La struttura distingue le schede finali dai materiali di processo e dai documenti consultabili.",
-    path: "~/architettura/indice.portfolio",
-    meta: [["sezioni", "4"], ["formato", "schede progetto"], ["contenuti", "da inserire"], ["accesso", "workspace 03"]],
+    description: "Archivio organizzato per progetto. Ogni scheda raccoglie presentazione, disegni, tavole PDF, modelli, processo e documenti.",
+    path: "~/architettura/indice.progetti",
+    meta: [["progetti", "2 predisposti"], ["struttura", "6 sezioni"], ["formati", "immagini · PDF · 3D"], ["accesso", "workspace 03"]],
     workspace: "portfolio",
-    workspaceLabel: "Apri il portfolio",
+    workspaceLabel: "Apri i progetti",
+  },
+  projectOne: {
+    index: "02",
+    code: "ARCH / PROGETTO 01",
+    title: "Progetto 01",
+    description: "Scheda dimostrativa pronta a riunire tutti i materiali di un singolo progetto senza disperderli in cartelle separate.",
+    path: "~/architettura/progetto-01",
+    meta: [["stato", "struttura pronta"], ["sezioni", "6"], ["tavole", "PDF"], ["modelli", "3D importabile"]],
+    children: ["projectPresentation", "projectDrawings", "projectBoards", "projectModels", "projectProcess", "projectDocuments"],
+  },
+  projectTwo: {
+    index: "03",
+    code: "ARCH / PROGETTO 02",
+    title: "Progetto 02",
+    description: "Seconda scheda predisposta per un progetto futuro, con la stessa struttura ordinata del Progetto 01.",
+    path: "~/architettura/progetto-02",
+    meta: [["stato", "vuoto"], ["sezioni", "6 predisposte"], ["ordine", "per progetto"], ["contenuti", "da inserire"]],
+    children: ["projectPresentation", "projectDrawings", "projectBoards", "projectModels", "projectProcess", "projectDocuments"],
+  },
+  projectPresentation: {
+    index: "01.1", code: "PROGETTO / PRESENTAZIONE", title: "Presentazione",
+    description: "Immagine di apertura, titolo, luogo, anno, ruolo e breve testo introduttivo del progetto.",
+    path: "~/architettura/progetto-01/presentazione", meta: [["contenuti", "immagine + testo"], ["stato", "da popolare"]],
+  },
+  projectDrawings: {
+    index: "01.2", code: "PROGETTO / DISEGNI", title: "Disegni",
+    description: "Piante, sezioni, prospetti, dettagli e schizzi ordinati per fase o scala.",
+    path: "~/architettura/progetto-01/disegni", meta: [["formati", "JPG · PNG · SVG"], ["vista", "sequenza"]],
+  },
+  projectBoards: {
+    index: "01.3", code: "PROGETTO / TAVOLE", title: "Tavole PDF",
+    description: "Tavole e dossier sfogliabili nel browser, con download attivabile quando desiderato.",
+    path: "~/architettura/progetto-01/tavole", meta: [["formato", "PDF"], ["lettura", "nel browser"]],
+  },
+  projectModels: {
+    index: "01.4", code: "PROGETTO / MODELLI", title: "Modelli",
+    description: "Modelli fisici fotografati e modelli digitali 3D, compresi file GLB o GLTF visualizzabili in modo interattivo.",
+    path: "~/architettura/progetto-01/modelli", meta: [["formati", "GLB · GLTF · immagini"], ["vista", "interattiva"]],
+  },
+  projectProcess: {
+    index: "01.5", code: "PROGETTO / PROCESSO", title: "Processo",
+    description: "Cronologia di prove, varianti, appunti e passaggi intermedi che documentano lo sviluppo del progetto.",
+    path: "~/architettura/progetto-01/processo", meta: [["ordine", "cronologico"], ["contenuti", "misti"]],
+  },
+  projectDocuments: {
+    index: "01.6", code: "PROGETTO / DOCUMENTI", title: "Documenti",
+    description: "Relazioni, testi, schede tecniche e materiali di riferimento collegati al progetto.",
+    path: "~/architettura/progetto-01/documenti", meta: [["formati", "PDF · testo"], ["stato", "da popolare"]],
   },
   drawings: {
     index: "02",
@@ -131,6 +179,27 @@ const contentItems = {
     description: "Spazio predisposto per biografia, curriculum, competenze, contatti e collegamenti ai profili esterni.",
     path: "~/profilo",
     meta: [["documenti", "biografia + CV"], ["contatti", "da inserire"], ["social", "da collegare"], ["stato", "struttura pronta"]],
+  },
+  art: {
+    index: "16", code: "ARTE / INDEX", title: "Arte",
+    description: "Archivio indipendente per pittura, grafica e scultura, pensato anche per opere digitali e lavori tridimensionali realizzati in VR.",
+    path: "~/arte", meta: [["sezioni", "3"], ["supporti", "2D + 3D"], ["accesso", "workspace 05"], ["stato", "struttura pronta"]],
+    workspace: "art", workspaceLabel: "Apri l’archivio arte",
+  },
+  painting: {
+    index: "17", code: "ARTE / PITTURA", title: "Pittura",
+    description: "Raccolta per dipinti digitali, opere nate in realtà virtuale, studi cromatici e serie pittoriche.",
+    path: "~/arte/pittura", meta: [["tecniche", "digitale · VR"], ["ordine", "opere e serie"], ["stato", "da popolare"]],
+  },
+  graphics: {
+    index: "18", code: "ARTE / GRAFICA", title: "Grafica",
+    description: "Area per disegni, stampe, lavori vettoriali, elaborazioni grafiche ed edizioni.",
+    path: "~/arte/grafica", meta: [["supporti", "raster · vettoriale"], ["ordine", "opere e serie"], ["stato", "da popolare"]],
+  },
+  sculpture: {
+    index: "19", code: "ARTE / SCULTURA", title: "Scultura",
+    description: "Spazio per sculture, ambienti e quadri tridimensionali esportati da Gravity Sketch, Tilt Brush o strumenti compatibili.",
+    path: "~/arte/scultura", meta: [["formati", "GLB · GLTF"], ["origine", "VR + modellazione"], ["vista", "3D interattiva"]],
   },
   media: {
     index: "13",
@@ -290,7 +359,7 @@ function switchWorkspace(name, options = {}) {
     else deskSphere.stop();
   }
   if (options.announce !== false) {
-    const labels = { desk: "workspace 01 · tavolo", sphere: "workspace 02 · sfera", portfolio: "workspace 03 · portfolio", media: "workspace 04 · media" };
+    const labels = { desk: "workspace 01 · tavolo", sphere: "workspace 02 · sfera", portfolio: "workspace 03 · architettura", media: "workspace 04 · media", art: "workspace 05 · arte" };
     announce(labels[name]);
   }
 }
@@ -405,7 +474,7 @@ function executeCommand(rawCommand, options = {}) {
     return;
   }
   if (command === "help" || command === "aiuto") {
-    terminalLine("comandi: desk · sphere · portfolio · media", "info");
+    terminalLine("comandi: desk · sphere · architecture · media · art", "info");
     terminalLine("open atlas · open quiz · open pixel · open architecture");
     terminalLine("clear · Ctrl+K per la palette dei comandi");
     announce("guida dei comandi visualizzata");
@@ -422,6 +491,9 @@ function executeCommand(rawCommand, options = {}) {
   }
   if (["media", "open media", "apri media"].includes(command)) {
     switchWorkspace("media"); terminalLine("workspace 04 montato", "info"); return;
+  }
+  if (["art", "arte", "open art", "apri arte"].includes(command)) {
+    switchWorkspace("art"); terminalLine("workspace 05 montato", "info"); return;
   }
   if (["architecture", "architettura", "open architecture", "apri architettura"].includes(command)) {
     renderPreview("architecture"); terminalLine("anteprima architettura aperta", "info"); return;
@@ -468,8 +540,9 @@ let paletteResults = [];
 const commands = [
   { label: "Apri il tavolo", detail: "Workspace 01", keys: "01", search: "desk tavolo", action: () => switchWorkspace("desk") },
   { label: "Esplora la sfera", detail: "Workspace 02", keys: "02", search: "sphere sfera mappa", action: () => switchWorkspace("sphere") },
-  { label: "Apri il portfolio", detail: "Workspace 03", keys: "03", search: "portfolio architettura", action: () => switchWorkspace("portfolio") },
+  { label: "Apri architettura", detail: "Workspace 03", keys: "03", search: "portfolio progetti architettura", action: () => switchWorkspace("portfolio") },
   { label: "Apri media", detail: "Workspace 04", keys: "04", search: "media audio video", action: () => switchWorkspace("media") },
+  { label: "Apri arte", detail: "Workspace 05", keys: "05", search: "arte pittura grafica scultura", action: () => switchWorkspace("art") },
   { label: "Avvia Atlante storico", detail: "Applicazione online", keys: "↗", search: "atlante lab", action: () => openExternal("atlas") },
   { label: "Avvia Quiz di storia dell’arte", detail: "73 opere", keys: "↗", search: "quiz arte lab", action: () => openExternal("quiz") },
   { label: "Avvia Pixel Sheet Converter", detail: "Applicazione online", keys: "↗", search: "pixel converter immagini lab", action: () => openExternal("pixel") },
@@ -528,9 +601,9 @@ document.querySelector("#status-command").addEventListener("click", openPalette)
 document.addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); openPalette(); return; }
   if (commandPalette.open) return;
-  if (event.altKey && /^[1-4]$/.test(event.key)) {
+  if (event.altKey && /^[1-5]$/.test(event.key)) {
     event.preventDefault();
-    switchWorkspace(["desk", "sphere", "portfolio", "media"][Number(event.key) - 1]);
+    switchWorkspace(["desk", "sphere", "portfolio", "media", "art"][Number(event.key) - 1]);
   }
   if (event.key === "Escape" && currentWorkspace !== "desk") switchWorkspace("desk");
 });
@@ -544,6 +617,7 @@ const sphereNodes = [
   { id: "media", title: "Media", lat: -.35, lon: -2.14, color: "#d4a14d" },
   { id: "profile", title: "Profilo", lat: .12, lon: -2.9, color: "#e8e1d3" },
   { id: "documents", title: "Documenti", lat: -.82, lon: -.7, color: "#6fa9bc" },
+  { id: "art", title: "Arte", lat: .28, lon: -1.55, color: "#c98a72" },
 ];
 
 const sphereAssets = [];
